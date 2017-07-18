@@ -109,6 +109,7 @@ module powerbi.extensibility.visual {
         imageURL?: string;
         selectable?: boolean;
         filtered?: boolean;
+        url?: string;
     }
 
     export interface ChicletSlicerSettings {
@@ -164,6 +165,7 @@ module powerbi.extensibility.visual {
             marginLeft: number;
         };
         images: {
+            clickableImage: boolean;
             imageSplit: number;
             stretchImage: boolean;
             bottomImage: boolean;
@@ -226,6 +228,7 @@ module powerbi.extensibility.visual {
         private static WidthOfScrollbar: number = 17;
 
         public static ItemContainerSelector: ClassAndSelector = createClassAndSelector('slicerItemContainer');
+        public static SlicerLinkWrapperSelector: ClassAndSelector = createClassAndSelector('slicer-link-wrapper');
         public static SlicerImgWrapperSelector: ClassAndSelector = createClassAndSelector('slicer-img-wrapper');
         public static SlicerTextWrapperSelector: ClassAndSelector = createClassAndSelector('slicer-text-wrapper');
         public static SlicerBodyHorizontalSelector: ClassAndSelector = createClassAndSelector('slicerBody-horizontal');
@@ -296,6 +299,7 @@ module powerbi.extensibility.visual {
                     marginLeft: 0,
                 },
                 images: {
+                    clickableImage: false,
                     imageSplit: 50,
                     stretchImage: false,
                     bottomImage: false
@@ -372,6 +376,7 @@ module powerbi.extensibility.visual {
                 defaultSettings.slicerText.padding = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.rows.padding, defaultSettings.slicerText.padding);
                 defaultSettings.slicerText.borderStyle = DataViewObjectsModule.getValue<string>(objects, chicletSlicerProps.rows.borderStyle, defaultSettings.slicerText.borderStyle);
 
+                defaultSettings.images.clickableImage = DataViewObjectsModule.getValue<boolean>(objects, chicletSlicerProps.images.clickableImage, defaultSettings.images.clickableImage);
                 defaultSettings.images.imageSplit = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.images.imageSplit, defaultSettings.images.imageSplit);
                 defaultSettings.images.stretchImage = DataViewObjectsModule.getValue<boolean>(objects, chicletSlicerProps.images.stretchImage, defaultSettings.images.stretchImage);
                 defaultSettings.images.bottomImage = DataViewObjectsModule.getValue<boolean>(objects, chicletSlicerProps.images.bottomImage, defaultSettings.images.bottomImage);
@@ -825,61 +830,30 @@ module powerbi.extensibility.visual {
             listItemElement
                 .enter()
                 .append('li')
-                .classed(ChicletSlicer.ItemContainerSelector.class, true);
-
-            listItemElement.style({
-                'margin-left': PixelConverter.toString(settings.slicerItemContainer.marginLeft)
-            });
-
-            let slicerImgWrapperSelection: UpdateSelection<any> = listItemElement
-                .selectAll(ChicletSlicer.SlicerImgWrapperSelector.selector)
-                .data((dataPoint: ChicletSlicerDataPoint) => {
-                    return [dataPoint];
+                .classed(ChicletSlicer.ItemContainerSelector.class, true)
+                .style({
+                    'margin-left': PixelConverter.toString(settings.slicerItemContainer.marginLeft)
                 });
+            const linkElement =
+                listItemElement.append("a")
+                    .classed(ChicletSlicer.SlicerLinkWrapperSelector.class, true)
+                    .attr("href", (d: ChicletSlicerDataPoint) => this.settings.images.clickableImage && d.url ? d.url : null)
+                    .attr("target", (d: ChicletSlicerDataPoint) => d.url ? "_blank" : null)
+                    .attr("title", (d: ChicletSlicerDataPoint) => d.url ? `Click to navigate to: ${d.url}` : null);
 
-            slicerImgWrapperSelection
-                .enter()
+            linkElement
                 .append('img')
                 .classed(ChicletSlicer.SlicerImgWrapperSelector.class, true);
 
-            slicerImgWrapperSelection
-                .exit()
-                .remove();
 
-            let slicerTextWrapperSelection: UpdateSelection<any> = listItemElement
-                .selectAll(ChicletSlicer.SlicerTextWrapperSelector.selector)
-                .data((dataPoint: ChicletSlicerDataPoint) => {
-                    return [dataPoint];
+            linkElement
+                .append('label')
+                .classed(ChicletSlicer.SlicerTextWrapperSelector.class, true)
+                .classed(ChicletSlicer.LabelTextSelector.class, true)
+                .style({
+                    'font-size': PixelConverter.fromPoint(settings.slicerText.textSize),
+                    'color': settings.slicerText.fontColor
                 });
-
-            slicerTextWrapperSelection
-                .enter()
-                .append('div')
-                .classed(ChicletSlicer.SlicerTextWrapperSelector.class, true);
-
-            let labelTextSelection: UpdateSelection<any> = slicerTextWrapperSelection
-                .selectAll(ChicletSlicer.LabelTextSelector.selector)
-                .data((dataPoint: ChicletSlicerDataPoint) => {
-                    return [dataPoint];
-                });
-
-            labelTextSelection
-                .enter()
-                .append('span')
-                .classed(ChicletSlicer.LabelTextSelector.class, true);
-
-            labelTextSelection.style({
-                'font-size': PixelConverter.fromPoint(settings.slicerText.textSize),
-                'color': settings.slicerText.fontColor
-            });
-
-            labelTextSelection
-                .exit()
-                .remove();
-
-            slicerTextWrapperSelection
-                .exit()
-                .remove();
 
             listItemElement
                 .exit()

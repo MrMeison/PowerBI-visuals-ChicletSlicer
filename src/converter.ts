@@ -156,6 +156,7 @@ module powerbi.extensibility.visual {
                                     this.hasHighlights = true;
                                 }
                                 if (seriesData.source.groupName && seriesData.source.groupName !== '') {
+                                    debugger;
                                     imageURL = converterHelper.getFormattedLegendLabel(seriesData.source, dataViewCategorical.values);
 
                                     if (!/^(ftp|http|https):\/\/[^ "]+$/.test(imageURL) &&

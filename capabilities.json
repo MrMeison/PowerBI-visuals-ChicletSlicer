@@ -17,6 +17,12 @@
             "displayNameKey": "Role_Image",
             "name": "Image",
             "kind": "Grouping"
+        },
+        {
+            "displayName": "URLs",
+            "displayNameKey": "Role_Urls",
+            "name": "URL",
+            "kind": "Grouping"
         }
     ],
     "dataViewMappings": [
@@ -31,6 +37,10 @@
                         "max": 1
                     },
                     "Values": {
+                        "min": 0,
+                        "max": 1
+                    },
+                    "URL": {
                         "min": 0,
                         "max": 1
                     }
@@ -54,6 +64,11 @@
                             {
                                 "bind": {
                                     "to": "Values"
+                                }
+                            },
+                            {
+                                "bind": {
+                                    "to": "URL"
                                 }
                             }
                         ],
@@ -389,6 +404,14 @@
             "displayName": "Images",
             "displayNameKey": "Visual_Images",
             "properties": {
+                "clickableImage": {
+                    "displayName": "Clickable URLs",
+                    "description": "Toggle to turn on/off for opening url",
+                    "displayNameKey": "Visual_Clickable_URL",
+                    "type": {
+                        "bool": true
+                    }
+                },
                 "imageSplit": {
                     "displayName": "Image Split",
                     "displayNameKey": "Visual_Images_Split",
