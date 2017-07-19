@@ -390,6 +390,19 @@ module powerbi.extensibility.visual {
 
                 return;
             }
+            data.slicerSettings.general.setSavedSelection = (filter: ISemanticFilter, selectionIds: string[]): void => {
+                this.isSelectionSaved = true;
+                this.visualHost.persistProperties(<VisualObjectInstancesToPersist>{
+                    merge: [{
+                        objectName: "general",
+                        selector: null,
+                        properties: {
+                            // filter: filter || null,
+                            selection: selectionIds && JSON.stringify(selectionIds) || ""
+                        }
+                    }]
+                });
+            };
             ChicletSlicer.validateSettings(data.slicerSettings);
 
 

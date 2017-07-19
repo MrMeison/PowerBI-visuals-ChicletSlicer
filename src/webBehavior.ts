@@ -115,7 +115,7 @@ module powerbi.extensibility.visual {
                     (dataPoint: ChicletSlicerDataPoint, index: number) => {
                         if (dataPoint.selected) {
                             return index;
-                        };
+                        }
                     });
 
                 if (settings.general.forcedSelection && selectedIndexes.length === 1) {
@@ -124,7 +124,7 @@ module powerbi.extensibility.visual {
                         (dataPoint: ChicletSlicerDataPoint, index: number) => {
                             if (!dataPoint.filtered) {
                                 return dataPoint;
-                            };
+                            }
                         });
 
                     if (availableDataPoints[index]

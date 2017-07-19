@@ -28,6 +28,9 @@ module powerbi.extensibility.visual {
     // powerbi.extensibility.utils.dataview
     import DataViewObjectsParser = powerbi.extensibility.utils.dataview.DataViewObjectsParser;
 
+    // powerbi.data
+    import ISemanticFilter = powerbi.data.ISemanticFilter;
+
     export class ChicletSlicerSettings extends DataViewObjectsParser {
         general: GeneralSettings = new GeneralSettings();
         header: HeaderSettings = new HeaderSettings();
@@ -46,6 +49,15 @@ module powerbi.extensibility.visual {
         showDisabled: string = ChicletSlicerShowDisabled.INPLACE;
         selection: string = null;
         selfFilterEnabled: boolean = false;
+        public getSavedSelection(): string[] {
+            try {
+                return JSON.parse(this.selection) || [];
+            } catch (ex) {
+                return [];
+            }
+        }
+
+        setSavedSelection: (filter: ISemanticFilter, selectionIds: string[]) => void;
     }
 
     export class HeaderSettings {
