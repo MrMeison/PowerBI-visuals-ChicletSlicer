@@ -58,11 +58,7 @@ module powerbi.extensibility.visual {
             this.host = host;
 
             if (dataViewCategorical.categories && dataViewCategorical.categories.length > 0) {
-                this.category = dataViewCategorical.categories[0];
-                this.categoryIdentities = this.category.identity;
-                this.categoryValues = this.category.values;
-                this.identityFields = <ISQExpr[]>this.category.identityFields;
-                this.categoryFormatString = valueFormatter.getFormatStringByColumn(this.category.source);
+                const values: ChicletSlicerColumns<any> = ChicletSlicerColumns.getCategoricalValues(dataView);
             }
 
             this.dataPoints = [];
@@ -156,7 +152,7 @@ module powerbi.extensibility.visual {
                                     this.hasHighlights = true;
                                 }
                                 if (seriesData.source.groupName && seriesData.source.groupName !== '') {
-                                    imageURL = converterHelper.getFormattedLegendLabel(seriesData.source, dataViewCategorical.values);
+                                    // imageURL = converterHelper.getFormattedLegendLabel(seriesData.source, dataViewCategorical.values);
 
                                     if (!/^(ftp|http|https):\/\/[^ "]+$/.test(imageURL) &&
                                         !/^data:image/.test(imageURL)) {

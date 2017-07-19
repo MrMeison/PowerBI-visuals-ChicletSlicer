@@ -29,22 +29,6 @@ module powerbi.extensibility.visual {
     import Selection = d3.Selection;
     import UpdateSelection = d3.selection.Update;
 
-    // powerbi
-    import DataView = powerbi.DataView;
-    import IEnumType = powerbi.IEnumType;
-    import IViewport = powerbi.IViewport;
-    import DataViewObjects = powerbi.DataViewObjects;
-    import DataViewMetadata = powerbi.DataViewMetadata;
-    import VisualDataRoleKind = powerbi.VisualDataRoleKind;
-    import DataViewCategorical = powerbi.DataViewCategorical;
-    import VisualObjectInstance = powerbi.VisualObjectInstance;
-    import DataViewScopeIdentity = powerbi.DataViewScopeIdentity;
-    import DataViewCategoryColumn = powerbi.DataViewCategoryColumn;
-    import DataViewCategoricalColumn = powerbi.DataViewCategoricalColumn;
-    import VisualObjectInstancesToPersist = powerbi.VisualObjectInstancesToPersist;
-    import DataViewObjectPropertyIdentifier = powerbi.DataViewObjectPropertyIdentifier;
-    import EnumerateVisualObjectInstancesOptions = powerbi.EnumerateVisualObjectInstancesOptions;
-
     // powerbi.data
     import ISQExpr = powerbi.data.ISQExpr;
     import ISemanticFilter = powerbi.data.ISemanticFilter;
@@ -73,23 +57,6 @@ module powerbi.extensibility.visual {
     import TextProperties = powerbi.extensibility.utils.formatting.TextProperties;
     import textMeasurementService = powerbi.extensibility.utils.formatting.textMeasurementService;
 
-    module ChicletBorderStyle {
-        export let ROUNDED: string = 'Rounded';
-        export let CUT: string = 'Cut';
-        export let SQUARE: string = 'Square';
-    }
-
-    module ChicletSlicerShowDisabled {
-        export let INPLACE: string = 'Inplace';
-        export let BOTTOM: string = 'Bottom';
-        export let HIDE: string = 'Hide';
-    }
-
-    export module Orientation {
-        export let HORIZONTAL: string = 'Horizontal';
-        export let VERTICAL: string = 'Vertical';
-    }
-
     export interface ChicletSlicerData {
         categorySourceName: string;
         formatString: string;
@@ -112,66 +79,6 @@ module powerbi.extensibility.visual {
         url?: string;
     }
 
-    export interface ChicletSlicerSettings {
-        general: {
-            orientation: string;
-            columns: number;
-            rows: number;
-            multiselect: boolean;
-            forcedSelection: boolean;
-            showDisabled: string;
-            selection: string;
-            selfFilterEnabled: boolean;
-            getSavedSelection?: () => ISelectionId[];
-            setSavedSelection?: (filter: ISemanticFilter, selectionIds: string[]) => void;
-            removeSavedSelection?: () => void;
-        };
-        margin: IMargin;
-        header: {
-            borderBottomWidth: number;
-            show: boolean;
-            outline: string;
-            fontColor: string;
-            background?: string;
-            textSize: number;
-            outlineColor: string;
-            outlineWeight: number;
-            title: string;
-        };
-        headerText: {
-            marginLeft: number;
-            marginTop: number;
-        };
-        slicerText: {
-            textSize: number;
-            height: number;
-            width: number;
-            fontColor: string;
-            selectedColor: string;
-            hoverColor: string;
-            unselectedColor: string;
-            disabledColor: string;
-            marginLeft: number;
-            outline: string;
-            background?: string;
-            transparency: number;
-            outlineColor: string;
-            outlineWeight: number;
-            padding: number;
-            borderStyle: string;
-        };
-        slicerItemContainer: {
-            marginTop: number;
-            marginLeft: number;
-        };
-        images: {
-            clickableImage: boolean;
-            imageSplit: number;
-            stretchImage: boolean;
-            bottomImage: boolean;
-        };
-    }
-
     export class ChicletSlicer implements IVisual {
         private $root: JQuery;
         private $searchHeader: JQuery;
@@ -182,10 +89,8 @@ module powerbi.extensibility.visual {
         private slicerBody: Selection<any>;
         private tableView: ITableView;
         private slicerData: ChicletSlicerData;
-
         private interactivityService: IInteractivityService;
         private visualHost: IVisualHost;
-
         private waitingForData: boolean;
         private isSelectionLoaded: boolean;
         private isSelectionSaved: boolean;
@@ -216,9 +121,6 @@ module powerbi.extensibility.visual {
         public static MaxTransparency: number = 100;
 
         private static MaxCellPadding: number = 20;
-
-
-
         private static MinSizeOfViewport: number = 0;
         private static MinColumns: number = 1;
 
@@ -240,72 +142,6 @@ module powerbi.extensibility.visual {
         public static InputSelector: ClassAndSelector = createClassAndSelector('slicerCheckbox');
         public static ClearSelector: ClassAndSelector = createClassAndSelector('clear');
         public static BodySelector: ClassAndSelector = createClassAndSelector('slicerBody');
-
-        public static DefaultStyleProperties(): ChicletSlicerSettings {
-            return {
-                general: {
-                    orientation: Orientation.VERTICAL,
-                    columns: 3,
-                    rows: 0,
-                    multiselect: true,
-                    forcedSelection: false,
-                    showDisabled: ChicletSlicerShowDisabled.INPLACE,
-                    selection: null,
-                    selfFilterEnabled: false
-                },
-                margin: {
-                    top: 50,
-                    bottom: 50,
-                    right: 50,
-                    left: 50
-                },
-                header: {
-                    borderBottomWidth: 1,
-                    show: true,
-                    outline: 'BottomOnly',
-                    fontColor: '#a6a6a6',
-                    background: null,
-                    textSize: 10,
-                    outlineColor: '#a6a6a6',
-                    outlineWeight: 1,
-                    title: '',
-                },
-                headerText: {
-                    marginLeft: 5,
-                    marginTop: 0
-                },
-                slicerText: {
-                    textSize: 10,
-                    height: 0,
-                    width: 0,
-                    fontColor: '#666666',
-                    hoverColor: '#212121',
-                    selectedColor: '#BDD7EE',
-                    unselectedColor: '#ffffff',
-                    disabledColor: 'grey',
-                    marginLeft: 5,
-                    outline: 'Frame',
-                    background: null,
-                    transparency: 0,
-                    outlineColor: '#000000',
-                    outlineWeight: 1,
-                    padding: 3,
-                    borderStyle: 'Cut',
-
-                },
-                slicerItemContainer: {
-                    // The margin is assigned in the less file. This is needed for the height calculations.
-                    marginTop: 5,
-                    marginLeft: 0,
-                },
-                images: {
-                    clickableImage: false,
-                    imageSplit: 50,
-                    stretchImage: false,
-                    bottomImage: false
-                }
-            };
-        }
 
         /**
          * Public to testability.
@@ -333,56 +169,12 @@ module powerbi.extensibility.visual {
                 !(dataView.categorical.categories[0].values.length > 0)) {
                 return;
             }
-
-            let converter: ChicletSlicerConverter = new ChicletSlicerConverter(dataView, visualHost);
+            let slicerData: ChicletSlicerData;
+            const converter: ChicletSlicerConverter = new ChicletSlicerConverter(dataView, visualHost);
+            const settings: ChicletSlicerSettings =  ChicletSlicerSettings.parse<ChicletSlicerSettings>(dataView);
             converter.convert();
 
-            let slicerData: ChicletSlicerData,
-                defaultSettings: ChicletSlicerSettings = this.DefaultStyleProperties(),
-                objects: DataViewObjects = dataView.metadata.objects;
-
-            if (objects) {
-                defaultSettings.general.orientation = DataViewObjectsModule.getValue<string>(objects, chicletSlicerProps.general.orientation, defaultSettings.general.orientation);
-                defaultSettings.general.columns = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.general.columns, defaultSettings.general.columns);
-                defaultSettings.general.rows = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.general.rows, defaultSettings.general.rows);
-                defaultSettings.general.multiselect = DataViewObjectsModule.getValue<boolean>(objects, chicletSlicerProps.general.multiselect, defaultSettings.general.multiselect);
-                defaultSettings.general.forcedSelection = DataViewObjectsModule.getValue<boolean>(objects, chicletSlicerProps.general.forcedSelection, defaultSettings.general.forcedSelection);
-                defaultSettings.general.showDisabled = DataViewObjectsModule.getValue<string>(objects, chicletSlicerProps.general.showDisabled, defaultSettings.general.showDisabled);
-                defaultSettings.general.selection = DataViewObjectsModule.getValue(dataView.metadata.objects, chicletSlicerProps.general.selection, defaultSettings.general.selection);
-                defaultSettings.general.selfFilterEnabled = DataViewObjectsModule.getValue<boolean>(objects, chicletSlicerProps.general.selfFilterEnabled, defaultSettings.general.selfFilterEnabled);
-
-                defaultSettings.header.show = DataViewObjectsModule.getValue<boolean>(objects, chicletSlicerProps.header.show, defaultSettings.header.show);
-                defaultSettings.header.title = DataViewObjectsModule.getValue<string>(objects, chicletSlicerProps.header.title, defaultSettings.header.title);
-                defaultSettings.header.fontColor = DataViewObjectsModule.getFillColor(objects, chicletSlicerProps.header.fontColor, defaultSettings.header.fontColor);
-                defaultSettings.header.background = DataViewObjectsModule.getFillColor(objects, chicletSlicerProps.header.background, defaultSettings.header.background);
-                defaultSettings.header.textSize = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.header.textSize, defaultSettings.header.textSize);
-                defaultSettings.header.outline = DataViewObjectsModule.getValue<string>(objects, chicletSlicerProps.header.outline, defaultSettings.header.outline);
-                defaultSettings.header.outlineColor = DataViewObjectsModule.getFillColor(objects, chicletSlicerProps.header.outlineColor, defaultSettings.header.outlineColor);
-                defaultSettings.header.outlineWeight = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.header.outlineWeight, defaultSettings.header.outlineWeight);
-
-                defaultSettings.slicerText.textSize = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.rows.textSize, defaultSettings.slicerText.textSize);
-                defaultSettings.slicerText.height = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.rows.height, defaultSettings.slicerText.height);
-                defaultSettings.slicerText.width = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.rows.width, defaultSettings.slicerText.width);
-                defaultSettings.slicerText.selectedColor = DataViewObjectsModule.getFillColor(objects, chicletSlicerProps.rows.selectedColor, defaultSettings.slicerText.selectedColor);
-                defaultSettings.slicerText.hoverColor = DataViewObjectsModule.getFillColor(objects, chicletSlicerProps.rows.hoverColor, defaultSettings.slicerText.hoverColor);
-                defaultSettings.slicerText.unselectedColor = DataViewObjectsModule.getFillColor(objects, chicletSlicerProps.rows.unselectedColor, defaultSettings.slicerText.unselectedColor);
-                defaultSettings.slicerText.disabledColor = DataViewObjectsModule.getFillColor(objects, chicletSlicerProps.rows.disabledColor, defaultSettings.slicerText.disabledColor);
-                defaultSettings.slicerText.background = DataViewObjectsModule.getFillColor(objects, chicletSlicerProps.rows.background, defaultSettings.slicerText.background);
-                defaultSettings.slicerText.transparency = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.rows.transparency, defaultSettings.slicerText.transparency);
-                defaultSettings.slicerText.fontColor = DataViewObjectsModule.getFillColor(objects, chicletSlicerProps.rows.fontColor, defaultSettings.slicerText.fontColor);
-                defaultSettings.slicerText.outline = DataViewObjectsModule.getValue<string>(objects, chicletSlicerProps.rows.outline, defaultSettings.slicerText.outline);
-                defaultSettings.slicerText.outlineColor = DataViewObjectsModule.getFillColor(objects, chicletSlicerProps.rows.outlineColor, defaultSettings.slicerText.outlineColor);
-                defaultSettings.slicerText.outlineWeight = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.rows.outlineWeight, defaultSettings.slicerText.outlineWeight);
-                defaultSettings.slicerText.padding = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.rows.padding, defaultSettings.slicerText.padding);
-                defaultSettings.slicerText.borderStyle = DataViewObjectsModule.getValue<string>(objects, chicletSlicerProps.rows.borderStyle, defaultSettings.slicerText.borderStyle);
-
-                defaultSettings.images.clickableImage = DataViewObjectsModule.getValue<boolean>(objects, chicletSlicerProps.images.clickableImage, defaultSettings.images.clickableImage);
-                defaultSettings.images.imageSplit = DataViewObjectsModule.getValue<number>(objects, chicletSlicerProps.images.imageSplit, defaultSettings.images.imageSplit);
-                defaultSettings.images.stretchImage = DataViewObjectsModule.getValue<boolean>(objects, chicletSlicerProps.images.stretchImage, defaultSettings.images.stretchImage);
-                defaultSettings.images.bottomImage = DataViewObjectsModule.getValue<boolean>(objects, chicletSlicerProps.images.bottomImage, defaultSettings.images.bottomImage);
-            }
-
-            if (defaultSettings.general.selfFilterEnabled && searchText) {
+            if (settings.general.selfFilterEnabled && searchText) {
                 searchText = searchText.toLowerCase();
                 converter.dataPoints.forEach(x => x.filtered = x.category.toLowerCase().indexOf(searchText) < 0);
             }
@@ -392,7 +184,7 @@ module powerbi.extensibility.visual {
             slicerData = {
                 categorySourceName: categories.source.displayName,
                 formatString: valueFormatter.getFormatStringByColumn(categories.source),
-                slicerSettings: defaultSettings,
+                slicerSettings: settings,
                 slicerDataPoints: converter.dataPoints,
                 identityFields: converter.identityFields,
                 hasHighlights: converter.hasHighlights
@@ -412,8 +204,6 @@ module powerbi.extensibility.visual {
 
             this.behavior = new ChicletSlicerWebBehavior();
             this.interactivityService = createInteractivityService(options.host);
-
-            this.settings = ChicletSlicer.DefaultStyleProperties();
         }
 
         public update(options: VisualUpdateOptions) {
@@ -735,20 +525,20 @@ module powerbi.extensibility.visual {
 
             let slicerContainer: Selection<any> = d3.select(this.$root.get(0))
                 .append('div')
-                .classed(ChicletSlicer.ContainerSelector.class, true);
+                .classed(ChicletSlicer.ContainerSelector.className, true);
 
             this.slicerHeader = slicerContainer
                 .append('div')
-                .classed(ChicletSlicer.HeaderSelector.class, true);
+                .classed(ChicletSlicer.HeaderSelector.className, true);
 
             this.slicerHeader
                 .append('span')
-                .classed(ChicletSlicer.ClearSelector.class, true)
+                .classed(ChicletSlicer.ClearSelector.className, true)
                 .attr('title', 'Clear');
 
             this.slicerHeader
                 .append('div')
-                .classed(ChicletSlicer.HeaderTextSelector.class, true)
+                .classed(ChicletSlicer.HeaderTextSelector.className, true)
                 .style({
                     'margin-left': PixelConverter.toString(settings.headerText.marginLeft),
                     'margin-top': PixelConverter.toString(settings.headerText.marginTop),
@@ -762,12 +552,12 @@ module powerbi.extensibility.visual {
 
             this.slicerBody = slicerContainer
                 .append('div')
-                .classed(ChicletSlicer.BodySelector.class, true)
+                .classed(ChicletSlicer.BodySelector.className, true)
                 .classed(
-                ChicletSlicer.SlicerBodyHorizontalSelector.class,
+                ChicletSlicer.SlicerBodyHorizontalSelector.className,
                 settings.general.orientation === Orientation.HORIZONTAL)
                 .classed(
-                ChicletSlicer.SlicerBodyVerticalSelector.class,
+                ChicletSlicer.SlicerBodyVerticalSelector.className,
                 settings.general.orientation === Orientation.VERTICAL
                 )
                 .style({
@@ -823,7 +613,7 @@ module powerbi.extensibility.visual {
                 .remove();
 
             let listItemElement: UpdateSelection<any> = ulItemElement
-                .selectAll(ChicletSlicer.ItemContainerSelector.selector)
+                .selectAll(ChicletSlicer.ItemContainerSelector.selectorName)
                 .data((dataPoint: ChicletSlicerDataPoint) => {
                     return [dataPoint];
                 });
@@ -831,26 +621,26 @@ module powerbi.extensibility.visual {
             listItemElement
                 .enter()
                 .append('li')
-                .classed(ChicletSlicer.ItemContainerSelector.class, true)
+                .classed(ChicletSlicer.ItemContainerSelector.className, true)
                 .style({
                     'margin-left': PixelConverter.toString(settings.slicerItemContainer.marginLeft)
                 });
 
             listItemElement
                 .append('img')
-                .classed(ChicletSlicer.SlicerImgWrapperSelector.class, true);
+                .classed(ChicletSlicer.SlicerImgWrapperSelector.className, true);
 
 
             listItemElement
                 .append('label')
-                .classed(ChicletSlicer.SlicerTextWrapperSelector.class, true)
+                .classed(ChicletSlicer.SlicerTextWrapperSelector.className, true)
                 .style({
                     'font-size': PixelConverter.fromPoint(settings.slicerText.textSize),
                     'color': settings.slicerText.fontColor
                 })
                 .append("a")
-                .classed(ChicletSlicer.LabelTextSelector.class, true)
-                .classed(ChicletSlicer.LabelTextSelector.class, true)
+                .classed(ChicletSlicer.LabelTextSelector.className, true)
+                .classed(ChicletSlicer.LabelTextSelector.className, true)
                 .attr("rel", (d: ChicletSlicerDataPoint) => "noopener noreferrer")
                 .attr("href", (d: ChicletSlicerDataPoint) => this.settings.images.clickableImage && d.url ? d.url : null)
                 .attr("target", (d: ChicletSlicerDataPoint) => d.url ? "_blank" : null)
@@ -870,7 +660,7 @@ module powerbi.extensibility.visual {
                     .classed('hidden', !settings.header.show);
 
                 this.slicerHeader
-                    .select(ChicletSlicer.HeaderTextSelector.selector)
+                    .select(ChicletSlicer.HeaderTextSelector.selectorName)
                     .text(settings.header.title.trim())
                     .style({
                         'border-style': this.getBorderStyle(settings.header.outline),
@@ -883,13 +673,13 @@ module powerbi.extensibility.visual {
 
                 this.slicerBody
                     .classed(
-                    ChicletSlicer.SlicerBodyHorizontalSelector.class,
+                    ChicletSlicer.SlicerBodyHorizontalSelector.className,
                     settings.general.orientation === Orientation.HORIZONTAL)
                     .classed(
-                    ChicletSlicer.SlicerBodyVerticalSelector.class,
+                    ChicletSlicer.SlicerBodyVerticalSelector.className,
                     settings.general.orientation === Orientation.VERTICAL);
 
-                let slicerText: Selection<any> = rowSelection.selectAll(ChicletSlicer.LabelTextSelector.selector),
+                let slicerText: Selection<any> = rowSelection.selectAll(ChicletSlicer.LabelTextSelector.selectorName),
                     textProperties: TextProperties = ChicletSlicer.getChicletTextProperties(settings.slicerText.textSize),
                     formatString: string = data.formatString;
 
@@ -917,7 +707,7 @@ module powerbi.extensibility.visual {
                     });
 
                 rowSelection
-                    .selectAll(ChicletSlicer.SlicerImgWrapperSelector.selector)
+                    .selectAll(ChicletSlicer.SlicerImgWrapperSelector.selectorName)
                     .style({
                         'max-height': settings.images.imageSplit + '%',
                         'display': (dataPoint: ChicletSlicerDataPoint) => (dataPoint.imageURL)
@@ -941,7 +731,7 @@ module powerbi.extensibility.visual {
                         return d.imageURL ? d.imageURL : '';
                     });
 
-                rowSelection.selectAll(ChicletSlicer.SlicerTextWrapperSelector.selector)
+                rowSelection.selectAll(ChicletSlicer.SlicerTextWrapperSelector.selectorName)
                     .style('height', (d: ChicletSlicerDataPoint): string => {
                         let height: number = ChicletSlicer.MaxImageSplit;
                         if (d.imageURL) {
@@ -955,7 +745,7 @@ module powerbi.extensibility.visual {
                         }
                     });
 
-                rowSelection.selectAll(ChicletSlicer.ItemContainerSelector.selector).style({
+                rowSelection.selectAll(ChicletSlicer.ItemContainerSelector.selectorName).style({
                     'color': settings.slicerText.fontColor,
                     'border-style': this.getBorderStyle(settings.slicerText.outline),
                     'border-color': settings.slicerText.outlineColor,
@@ -979,10 +769,10 @@ module powerbi.extensibility.visual {
                     this.interactivityService.applySelectionStateToData(data.slicerDataPoints);
 
                     let slicerBody: Selection<any> = this.slicerBody.attr('width', this.currentViewport.width),
-                        slicerItemContainers: Selection<any> = slicerBody.selectAll(ChicletSlicer.ItemContainerSelector.selector),
-                        slicerItemLabels: Selection<any> = slicerBody.selectAll(ChicletSlicer.LabelTextSelector.selector),
-                        slicerItemInputs: Selection<any> = slicerBody.selectAll(ChicletSlicer.InputSelector.selector),
-                        slicerClear: Selection<any> = this.slicerHeader.select(ChicletSlicer.ClearSelector.selector);
+                        slicerItemContainers: Selection<any> = slicerBody.selectAll(ChicletSlicer.ItemContainerSelector.selectorName),
+                        slicerItemLabels: Selection<any> = slicerBody.selectAll(ChicletSlicer.LabelTextSelector.selectorName),
+                        slicerItemInputs: Selection<any> = slicerBody.selectAll(ChicletSlicer.InputSelector.selectorName),
+                        slicerClear: Selection<any> = this.slicerHeader.select(ChicletSlicer.ClearSelector.selectorName);
 
                     let behaviorOptions: ChicletSlicerBehaviorOptions = {
                         dataPoints: data.slicerDataPoints,
@@ -1001,11 +791,11 @@ module powerbi.extensibility.visual {
                     });
 
                     this.behavior.styleSlicerInputs(
-                        rowSelection.select(ChicletSlicer.ItemContainerSelector.selector),
+                        rowSelection.select(ChicletSlicer.ItemContainerSelector.selectorName),
                         this.interactivityService.hasSelection());
                 }
                 else {
-                    this.behavior.styleSlicerInputs(rowSelection.select(ChicletSlicer.ItemContainerSelector.selector), false);
+                    this.behavior.styleSlicerInputs(rowSelection.select(ChicletSlicer.ItemContainerSelector.selectorName), false);
                 }
             }
         };

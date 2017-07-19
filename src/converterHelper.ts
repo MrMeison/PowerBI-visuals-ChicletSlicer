@@ -24,19 +24,26 @@
  *  THE SOFTWARE.
  */
 
-module powerbi.extensibility.visual.converterHelper {
-    // powerbi.extensibility.utils.formatting
-    import valueFormatter = powerbi.extensibility.utils.formatting.valueFormatter;
-
-    export function getFormattedLegendLabel(source: DataViewMetadataColumn, values: DataViewValueColumns): string {
-        let sourceForFormat = source,
-            nameForFormat: PrimitiveValue = source.displayName;
-
-        if (source.groupName !== undefined) {
-            sourceForFormat = values.source;
-            nameForFormat = source.groupName;
+module powerbi.extensibility.visual {
+    import converterHelper = powerbi.extensibility.utils.dataview.converterHelper;
+    export class ChicletSlicerColumns<T> {
+        public static getCategoricalValues(dataView: DataView): ChicletSlicerColumns<any> {
+            let categorical: DataViewCategorical = dataView && dataView.categorical;
+            let categories: DataViewCategoricalColumn[] = categorical && categorical.categories || [];
+            let values: DataViewValueColumns = categorical && categorical.values || <DataViewValueColumns>[];
+            let series: PrimitiveValue[] = categorical && values.source && this.getSeriesValues(dataView);
+            return categorical && _.mapValues(new this<any[]>(), (n, i) =>
+                (<DataViewCategoricalColumn[]>_.toArray(categories)).concat(_.toArray(values))
+                    .filter(x => x.source.roles && x.source.roles[i]).map(x => x.values)[0]
+                || values.source && values.source.roles && values.source.roles[i] && series);
         }
-
-        return valueFormatter.format(nameForFormat, valueFormatter.getFormatStringByColumn(sourceForFormat));
+        public static getSeriesValues(dataView: DataView): PrimitiveValue[] {
+            return dataView && dataView.categorical && dataView.categorical.values
+                && dataView.categorical.values.map(x => converterHelper.getSeriesName(x.source));
+        }
+        public Category: T = null;
+        public Values: T = null;
+        public Image: T = null;
+        public URL: T = null;
     }
 }
