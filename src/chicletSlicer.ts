@@ -806,12 +806,13 @@ module powerbi.extensibility.visual {
 
         private enterSelection(rowSelection: Selection<any>): void {
             let settings: ChicletSlicerSettings = this.settings;
-
+            rowSelection.selectAll("ul")
+                .remove();
             let ulItemElement: UpdateSelection<any> = rowSelection
                 .selectAll('ul')
                 .data((dataPoint: ChicletSlicerDataPoint) => {
                     return [dataPoint];
-                });
+                }, (d: ChicletSlicerDataPoint) => d.imageURL);
 
             ulItemElement
                 .enter()
@@ -834,26 +835,26 @@ module powerbi.extensibility.visual {
                 .style({
                     'margin-left': PixelConverter.toString(settings.slicerItemContainer.marginLeft)
                 });
-            const linkElement =
-                listItemElement.append("a")
-                    .classed(ChicletSlicer.SlicerLinkWrapperSelector.class, true)
-                    .attr("href", (d: ChicletSlicerDataPoint) => this.settings.images.clickableImage && d.url ? d.url : null)
-                    .attr("target", (d: ChicletSlicerDataPoint) => d.url ? "_blank" : null)
-                    .attr("title", (d: ChicletSlicerDataPoint) => d.url ? `Click to navigate to: ${d.url}` : null);
 
-            linkElement
+            listItemElement
                 .append('img')
                 .classed(ChicletSlicer.SlicerImgWrapperSelector.class, true);
 
 
-            linkElement
+            listItemElement
                 .append('label')
                 .classed(ChicletSlicer.SlicerTextWrapperSelector.class, true)
-                .classed(ChicletSlicer.LabelTextSelector.class, true)
                 .style({
                     'font-size': PixelConverter.fromPoint(settings.slicerText.textSize),
                     'color': settings.slicerText.fontColor
-                });
+                })
+                .append("a")
+                .classed(ChicletSlicer.LabelTextSelector.class, true)
+                .classed(ChicletSlicer.LabelTextSelector.class, true)
+                .attr("rel", (d: ChicletSlicerDataPoint) => "noopener noreferrer")
+                .attr("href", (d: ChicletSlicerDataPoint) => this.settings.images.clickableImage && d.url ? d.url : null)
+                .attr("target", (d: ChicletSlicerDataPoint) => d.url ? "_blank" : null)
+                .attr("title", (d: ChicletSlicerDataPoint) => d.url ? `Click to navigate to: ${d.url}` : null);
 
             listItemElement
                 .exit()

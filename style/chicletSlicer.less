@@ -91,6 +91,15 @@
 
         li.slicerItemContainer {
             height: 100%;
+            width: 100%;
+            padding: 2px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-content: center;
+            align-items: stretch;
+            box-sizing: border-box;
 
             .slicer-text-wrapper {
                 box-sizing: border-box;
@@ -152,7 +161,11 @@
     .slicerText,
     .slicerContainer .slicerText {
         line-height: 20px;
+        text-decoration: none;
     }
+    .slicerText[href] {
+        color: blue;
+    } 
 
     .searchHeader {
         overflow: hidden;
@@ -200,16 +213,6 @@
     }
 
     .slicer-link-wrapper {
-        height: 100%;
-        width: 100%;
-        padding: 2px;
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        justify-content: center;
-        align-content: center;
-        align-items: stretch;
-        box-sizing: border-box;
         &--active {
             color: blue;
         }
