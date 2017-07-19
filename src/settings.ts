@@ -31,6 +31,7 @@ module powerbi.extensibility.visual {
     export class ChicletSlicerSettings extends DataViewObjectsParser {
         general: GeneralSettings = new GeneralSettings();
         header: HeaderSettings = new HeaderSettings();
+        headerText: HeaderTextSettings = new HeaderTextSettings();
         slicerText: SlicerTextSettings = new SlicerTextSettings();
         slicerItemContainer: SlicerItemContainerSettings = new SlicerItemContainerSettings();
         images: ImagesSettings = new ImagesSettings();
@@ -55,34 +56,40 @@ module powerbi.extensibility.visual {
         textSize: string = "10";
         outline: string = "BottomOnly";
         outlineColor: string = "#a6a6a6";
-        outlineWeight: string = "1";
+        outlineWeight: number = 1;
+        borderBottomWidth: number = 1;
+    }
+
+    export class HeaderTextSettings {
+        marginLeft: number = 5;
+        marginTop: number = 0;
     }
 
     export class SlicerTextSettings {
         textSize: string = "10";
-        height: string = "0";
-        width: string = "0";
+        height: number = 0;
+        width: number = 0;
         selectedColor: string = "#BDD7EE";
         hoverColor: string = "#212121";
         unselectedColor: string = "#FFFFFF";
         disabledColor: string = "#808080";
         background: string = null;
-        transparency: string = "0";
+        transparency: number = 0;
         fontColor: string = "#666666";
         outline: string = "Frame";
         outlineColor: string = "#000000";
-        outlineWeight: string = "1";
-        padding: string = "3";
+        outlineWeight: number = 1;
+        padding: number = 3;
         borderStyle: string = "Cut";
     }
 
     export class SlicerItemContainerSettings {
-        marginLeft: string = "0";
+        marginLeft: number = 0;
     }
 
     export class ImagesSettings {
         clickableImage: boolean = false;
-        imageSplit: string = "50";
+        imageSplit: number = 50;
         stretchImage: boolean = false;
         bottomImage: boolean = false;
     }

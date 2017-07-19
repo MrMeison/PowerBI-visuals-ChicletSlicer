@@ -39,7 +39,6 @@ module powerbi.extensibility.visual {
         private dataViewCategorical: DataViewCategorical;
         private dataViewMetadata: DataViewMetadata;
         private category: DataViewCategoryColumn;
-        private categoryIdentities: DataViewScopeIdentity[];
         private categoryValues: any[];
         private categoryFormatString: string;
         public identityFields: ISQExpr[];
@@ -50,6 +49,7 @@ module powerbi.extensibility.visual {
 
         private host: IVisualHost;
         public hasSelectionOverride: boolean;
+        private static selectedPropertyIdentifier: DataViewObjectPropertyIdentifier = { objectName: 'general', propertyName: 'selected' };
 
         public constructor(dataView: DataView, host: IVisualHost) {
             const dataViewCategorical: DataViewCategorical = dataView.categorical;
@@ -94,7 +94,7 @@ module powerbi.extensibility.visual {
 
                 if (this.dataViewCategorical.values) {
                     for (let idx: number = 0; idx < this.categoryValues.length; idx++) {
-                        let selected = this.isCategoryColumnSelected(chicletSlicerProps.selectedPropertyIdentifier, this.category, idx);
+                        let selected = this.isCategoryColumnSelected(ChicletSlicerConverter.selectedPropertyIdentifier, this.category, idx);
                         if (selected != null) {
                             hasSelection = selected;
                             break;
@@ -109,7 +109,7 @@ module powerbi.extensibility.visual {
 
                 for (let categoryIndex: number = 0, categoryCount = this.categoryValues.length; categoryIndex < categoryCount; categoryIndex++) {
                     let categoryIsSelected: boolean = this.isCategoryColumnSelected(
-                        chicletSlicerProps.selectedPropertyIdentifier,
+                        ChicletSlicerConverter.selectedPropertyIdentifier,
                         this.category,
                         categoryIndex);
 
