@@ -39,26 +39,25 @@ module powerbi.extensibility.visual {
         private dataViewCategorical: DataViewCategorical;
         private dataViewMetadata: DataViewMetadata;
         private category: DataViewCategoryColumn;
-        private categoryValues: any[];
-        private categoryFormatString: string;
         public identityFields: ISQExpr[];
-
         public numberOfCategoriesSelectedInData: number;
         public dataPoints: ChicletSlicerDataPoint[];
         public hasHighlights: boolean;
-
         private host: IVisualHost;
         public hasSelectionOverride: boolean;
         private static selectedPropertyIdentifier: DataViewObjectPropertyIdentifier = { objectName: 'general', propertyName: 'selected' };
+        private data: ChicletSlicerColumns<any>;
 
         public constructor(dataView: DataView, host: IVisualHost) {
             const dataViewCategorical: DataViewCategorical = dataView.categorical;
+            debugger;
+            this.category = ChicletSlicerColumns.getCategoryColumnByName(dataView, "Category");
             this.dataViewCategorical = dataViewCategorical;
             this.dataViewMetadata = dataView.metadata;
             this.host = host;
 
             if (dataViewCategorical.categories && dataViewCategorical.categories.length > 0) {
-                const values: ChicletSlicerColumns<any> = ChicletSlicerColumns.getCategoricalValues(dataView);
+                this.data = ChicletSlicerColumns.getCategoricalValues(dataView);
             }
 
             this.dataPoints = [];
@@ -75,9 +74,10 @@ module powerbi.extensibility.visual {
         public convert(): void {
             this.dataPoints = [];
             this.numberOfCategoriesSelectedInData = 0;
+            const categoryValues = this.data.Category;
             // If category exists, we render labels using category values. If not, we render labels
             // using measure labels.
-            if (this.categoryValues) {
+            if (categoryValues) {
                 let objects = this.dataViewMetadata ? <any>this.dataViewMetadata.objects : undefined;
 
                 let isInvertedSelectionMode: boolean = false;
@@ -93,7 +93,7 @@ module powerbi.extensibility.visual {
                 let hasSelection: boolean = undefined;
 
                 if (this.dataViewCategorical.values) {
-                    for (let idx: number = 0; idx < this.categoryValues.length; idx++) {
+                    for (let idx: number = 0; idx < categoryValues.length; idx++) {
                         let selected = this.isCategoryColumnSelected(ChicletSlicerConverter.selectedPropertyIdentifier, this.category, idx);
                         if (selected != null) {
                             hasSelection = selected;
@@ -107,7 +107,7 @@ module powerbi.extensibility.visual {
 
                 this.hasHighlights = false;
 
-                for (let categoryIndex: number = 0, categoryCount = this.categoryValues.length; categoryIndex < categoryCount; categoryIndex++) {
+                for (let categoryIndex: number = 0, categoryCount = categoryValues.length; categoryIndex < categoryCount; categoryIndex++) {
                     let categoryIsSelected: boolean = this.isCategoryColumnSelected(
                         ChicletSlicerConverter.selectedPropertyIdentifier,
                         this.category,
@@ -136,42 +136,16 @@ module powerbi.extensibility.visual {
                         this.numberOfCategoriesSelectedInData++;
                     }
 
-                    let categoryValue: any = this.categoryValues[categoryIndex],
-                        categoryLabel: string = valueFormatter.format(categoryValue, this.categoryFormatString),
-                        imageURL: string = '';
-
-                    if (this.dataViewCategorical.values) {
-
-                        // Series are either measures in the multi-measure case, or the single series otherwise
-                        for (let seriesIndex: number = 0; seriesIndex < this.dataViewCategorical.values.length; seriesIndex++) {
-                            let seriesData: any = dataViewCategorical.values[seriesIndex];
-                            if (seriesData.values[categoryIndex] != null) {
-                                value = <number>seriesData.values[categoryIndex];
-                                if (seriesData.highlights) {
-                                    selectable = !(seriesData.highlights[categoryIndex] === null);
-                                    this.hasHighlights = true;
-                                }
-                                if (seriesData.source.groupName && seriesData.source.groupName !== '') {
-                                    // imageURL = converterHelper.getFormattedLegendLabel(seriesData.source, dataViewCategorical.values);
-
-                                    if (!/^(ftp|http|https):\/\/[^ "]+$/.test(imageURL) &&
-                                        !/^data:image/.test(imageURL)) {
-                                        imageURL = undefined;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
                     let categorySelectionId: ISelectionId = this.host.createSelectionIdBuilder()
                         .withCategory(this.category, categoryIndex)
                         .createSelectionId();
 
                     this.dataPoints.push({
                         identity: categorySelectionId as powerbi.visuals.ISelectionId,
-                        category: categoryLabel,
-                        imageURL: imageURL,
-                        value: value,
+                        category: this.data.Category[categoryIndex],
+                        imageURL: this.data.Image[categoryIndex],
+                        value: this.data.Values[categoryIndex],
+                        url: this.data.URL[categoryIndex],
                         selected: false,
                         selectable: selectable
                     });

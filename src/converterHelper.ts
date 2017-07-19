@@ -41,6 +41,15 @@ module powerbi.extensibility.visual {
             return dataView && dataView.categorical && dataView.categorical.values
                 && dataView.categorical.values.map(x => converterHelper.getSeriesName(x.source));
         }
+
+        public static getCategoryColumnByName(dataView: DataView, name: string): DataViewCategoryColumn {
+            if (dataView && dataView.categorical && dataView.categorical.categories) {
+                let categories: DataViewCategoryColumn[] = dataView.categorical.categories.filter(x => x.source.roles[name]);
+                if (categories && categories.length) {
+                    return categories[0];
+                }
+            }
+        }
         public Category: T = null;
         public Values: T = null;
         public Image: T = null;

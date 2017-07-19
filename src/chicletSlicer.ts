@@ -33,9 +33,6 @@ module powerbi.extensibility.visual {
     import ISQExpr = powerbi.data.ISQExpr;
     import ISemanticFilter = powerbi.data.ISemanticFilter;
 
-    // powerbi.extensibility.utils.dataview
-    import DataViewObjectsModule = powerbi.extensibility.utils.dataview.DataViewObjects;
-
     // powerbi.extensibility.utils.type
     import PixelConverter = powerbi.extensibility.utils.type.PixelConverter;
 
@@ -45,7 +42,6 @@ module powerbi.extensibility.visual {
     import createInteractivityService = powerbi.extensibility.utils.interactivity.createInteractivityService;
 
     // powerbi.extensibility.utils.svg
-    import IMargin = powerbi.extensibility.utils.svg.IMargin;
     import ClassAndSelector = powerbi.extensibility.utils.svg.CssConstants.ClassAndSelector;
     import createClassAndSelector = powerbi.extensibility.utils.svg.CssConstants.createClassAndSelector;
 
@@ -170,6 +166,7 @@ module powerbi.extensibility.visual {
                 return;
             }
             let slicerData: ChicletSlicerData;
+            debugger;
             const converter: ChicletSlicerConverter = new ChicletSlicerConverter(dataView, visualHost);
             const settings: ChicletSlicerSettings = ChicletSlicerSettings.parse<ChicletSlicerSettings>(dataView);
             converter.convert();
@@ -195,8 +192,6 @@ module powerbi.extensibility.visual {
 
             return slicerData;
         }
-
-
         constructor(options: VisualConstructorOptions) {
             this.$root = $(options.element);
 
@@ -213,6 +208,7 @@ module powerbi.extensibility.visual {
                 !options.viewport) {
                 return;
             }
+            this.settings = this.parseSettings(options.dataViews[0]);
 
             if (!this.currentViewport) {
                 this.currentViewport = options.viewport;
@@ -283,100 +279,9 @@ module powerbi.extensibility.visual {
         }
 
         public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstanceEnumeration {
-            let data: ChicletSlicerData = this.slicerData;
-
-            if (!data) {
-                return [];
-            }
-
-            switch (options.objectName) {
-                case 'rows':
-                    return this.enumerateRows(data);
-                case 'header':
-                    return this.enumerateHeader(data);
-                case 'general':
-                    return this.enumerateGeneral(data);
-                case 'images':
-                    return this.enumerateImages(data);
-                default:
-                    return [];
-            }
-        }
-
-        private enumerateHeader(data: ChicletSlicerData): VisualObjectInstance[] {
-            let slicerSettings: ChicletSlicerSettings = this.settings;
-
-            return [{
-                selector: null,
-                objectName: 'header',
-                properties: {
-                    show: slicerSettings.header.show,
-                    title: slicerSettings.header.title,
-                    fontColor: slicerSettings.header.fontColor,
-                    background: slicerSettings.header.background,
-                    textSize: slicerSettings.header.textSize,
-                    outline: slicerSettings.header.outline,
-                    outlineColor: slicerSettings.header.outlineColor,
-                    outlineWeight: slicerSettings.header.outlineWeight
-                }
-            }];
-        }
-
-        private enumerateRows(data: ChicletSlicerData): VisualObjectInstance[] {
-            let slicerSettings: ChicletSlicerSettings = this.settings;
-
-            return [{
-                selector: null,
-                objectName: 'rows',
-                properties: {
-                    textSize: slicerSettings.slicerText.textSize,
-                    height: slicerSettings.slicerText.height,
-                    width: slicerSettings.slicerText.width,
-                    background: slicerSettings.slicerText.background,
-                    transparency: slicerSettings.slicerText.transparency,
-                    selectedColor: slicerSettings.slicerText.selectedColor,
-                    hoverColor: slicerSettings.slicerText.hoverColor,
-                    unselectedColor: slicerSettings.slicerText.unselectedColor,
-                    disabledColor: slicerSettings.slicerText.disabledColor,
-                    outline: slicerSettings.slicerText.outline,
-                    outlineColor: slicerSettings.slicerText.outlineColor,
-                    outlineWeight: slicerSettings.slicerText.outlineWeight,
-                    fontColor: slicerSettings.slicerText.fontColor,
-                    padding: slicerSettings.slicerText.padding,
-                    borderStyle: slicerSettings.slicerText.borderStyle,
-                }
-            }];
-        }
-
-        private enumerateGeneral(data: ChicletSlicerData): VisualObjectInstance[] {
-            let slicerSettings: ChicletSlicerSettings = this.settings;
-
-            return [{
-                selector: null,
-                objectName: 'general',
-                properties: {
-                    orientation: slicerSettings.general.orientation,
-                    columns: slicerSettings.general.columns,
-                    rows: slicerSettings.general.rows,
-                    showDisabled: slicerSettings.general.showDisabled,
-                    multiselect: slicerSettings.general.multiselect,
-                    forcedSelection: slicerSettings.general.forcedSelection
-                }
-            }];
-        }
-
-        private enumerateImages(data: ChicletSlicerData): VisualObjectInstance[] {
-            let slicerSettings: ChicletSlicerSettings = this.settings;
-
-            return [{
-                selector: null,
-                objectName: 'images',
-                properties: {
-                    imageSplit: slicerSettings.images.imageSplit,
-                    stretchImage: slicerSettings.images.stretchImage,
-                    bottomImage: slicerSettings.images.bottomImage,
-                }
-            }];
+            return ChicletSlicerSettings.enumerateObjectInstances(
+                this.settings || ChicletSlicerSettings.getDefault(),
+                options);
         }
 
         private updateInternal(resetScrollbarPosition: boolean) {
@@ -460,8 +365,6 @@ module powerbi.extensibility.visual {
                 .viewport(this.getSlicerBodyViewport(this.currentViewport))
                 .render();
         }
-
-
 
         private initContainer() {
             let settings: ChicletSlicerSettings = this.settings,
@@ -815,6 +718,9 @@ module powerbi.extensibility.visual {
             return textSettings.height !== 0
                 ? textSettings.height
                 : textMeasurementService.estimateSvgTextHeight(ChicletSlicer.getChicletTextProperties(+textSettings.textSize));
+        }
+        private parseSettings(dataView: DataView): ChicletSlicerSettings {
+            return ChicletSlicerSettings.parse<ChicletSlicerSettings>(dataView);
         }
 
         private static getBorderStyle(outlineElement: string): string {
