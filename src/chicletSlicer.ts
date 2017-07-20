@@ -92,12 +92,12 @@ module powerbi.extensibility.visual {
         private isSelectionSaved: boolean;
 
         /**
-         * It's public for testability.
+         * It"s public for testability.
          */
         public behavior: ChicletSlicerWebBehavior;
 
         /**
-         * It's public for testability.
+         * It"s public for testability.
          */
         public settings: ChicletSlicerSettings;
 
@@ -125,19 +125,19 @@ module powerbi.extensibility.visual {
 
         private static WidthOfScrollbar: number = 17;
 
-        public static ItemContainerSelector: ClassAndSelector = createClassAndSelector('slicerItemContainer');
-        public static SlicerLinkWrapperSelector: ClassAndSelector = createClassAndSelector('slicer-link-wrapper');
-        public static SlicerImgWrapperSelector: ClassAndSelector = createClassAndSelector('slicer-img-wrapper');
-        public static SlicerTextWrapperSelector: ClassAndSelector = createClassAndSelector('slicer-text-wrapper');
-        public static SlicerBodyHorizontalSelector: ClassAndSelector = createClassAndSelector('slicerBody-horizontal');
-        public static SlicerBodyVerticalSelector: ClassAndSelector = createClassAndSelector('slicerBody-vertical');
-        public static HeaderTextSelector: ClassAndSelector = createClassAndSelector('headerText');
-        public static ContainerSelector: ClassAndSelector = createClassAndSelector('chicletSlicer');
-        public static LabelTextSelector: ClassAndSelector = createClassAndSelector('slicerText');
-        public static HeaderSelector: ClassAndSelector = createClassAndSelector('slicerHeader');
-        public static InputSelector: ClassAndSelector = createClassAndSelector('slicerCheckbox');
-        public static ClearSelector: ClassAndSelector = createClassAndSelector('clear');
-        public static BodySelector: ClassAndSelector = createClassAndSelector('slicerBody');
+        public static ItemContainerSelector: ClassAndSelector = createClassAndSelector("slicerItemContainer");
+        public static SlicerLinkWrapperSelector: ClassAndSelector = createClassAndSelector("slicer-link-wrapper");
+        public static SlicerImgWrapperSelector: ClassAndSelector = createClassAndSelector("slicer-img-wrapper");
+        public static SlicerTextWrapperSelector: ClassAndSelector = createClassAndSelector("slicer-text-wrapper");
+        public static SlicerBodyHorizontalSelector: ClassAndSelector = createClassAndSelector("slicerBody-horizontal");
+        public static SlicerBodyVerticalSelector: ClassAndSelector = createClassAndSelector("slicerBody-vertical");
+        public static HeaderTextSelector: ClassAndSelector = createClassAndSelector("headerText");
+        public static ContainerSelector: ClassAndSelector = createClassAndSelector("chicletSlicer");
+        public static LabelTextSelector: ClassAndSelector = createClassAndSelector("slicerText");
+        public static HeaderSelector: ClassAndSelector = createClassAndSelector("slicerHeader");
+        public static InputSelector: ClassAndSelector = createClassAndSelector("slicerCheckbox");
+        public static ClearSelector: ClassAndSelector = createClassAndSelector("clear");
+        public static BodySelector: ClassAndSelector = createClassAndSelector("slicerBody");
 
         /**
          * Public to testability.
@@ -347,7 +347,7 @@ module powerbi.extensibility.visual {
                     extraSpaceForCell;
 
                 let hasImage: boolean = _.some(data.slicerDataPoints, (dataPoint: ChicletSlicerDataPoint) => {
-                    return dataPoint.imageURL !== '' && typeof dataPoint.imageURL !== "undefined";
+                    return dataPoint.imageURL !== "" && typeof dataPoint.imageURL !== "undefined";
                 });
 
                 if (hasImage) {
@@ -374,34 +374,34 @@ module powerbi.extensibility.visual {
                 slicerBodyViewport: IViewport = this.getSlicerBodyViewport(this.currentViewport);
 
             let slicerContainer: Selection<any> = d3.select(this.$root.get(0))
-                .append('div')
+                .append("div")
                 .classed(ChicletSlicer.ContainerSelector.className, true);
 
             this.slicerHeader = slicerContainer
-                .append('div')
+                .append("div")
                 .classed(ChicletSlicer.HeaderSelector.className, true);
 
             this.slicerHeader
-                .append('span')
+                .append("span")
                 .classed(ChicletSlicer.ClearSelector.className, true)
-                .attr('title', 'Clear');
+                .attr("title", "Clear");
 
             this.slicerHeader
-                .append('div')
+                .append("div")
                 .classed(ChicletSlicer.HeaderTextSelector.className, true)
                 .style({
-                    'margin-left': PixelConverter.toString(settings.headerText.marginLeft),
-                    'margin-top': PixelConverter.toString(settings.headerText.marginTop),
-                    'border-style': ChicletSlicer.getBorderStyle(settings.header.outline),
-                    'border-color': settings.header.outlineColor,
-                    'border-width': ChicletSlicer.getBorderWidth(settings.header.outline, settings.header.outlineWeight),
-                    'font-size': PixelConverter.fromPoint(+settings.header.textSize),
+                    "margin-left": PixelConverter.toString(settings.headerText.marginLeft),
+                    "margin-top": PixelConverter.toString(settings.headerText.marginTop),
+                    "border-style": ChicletSlicer.getBorderStyle(settings.header.outline),
+                    "border-color": settings.header.outlineColor,
+                    "border-width": ChicletSlicer.getBorderWidth(settings.header.outline, settings.header.outlineWeight),
+                    "font-size": PixelConverter.fromPoint(+settings.header.textSize),
                 });
 
             this.createSearchHeader($(slicerContainer.node()));
 
             this.slicerBody = slicerContainer
-                .append('div')
+                .append("div")
                 .classed(ChicletSlicer.BodySelector.className, true)
                 .classed(
                 ChicletSlicer.SlicerBodyHorizontalSelector.className,
@@ -411,8 +411,8 @@ module powerbi.extensibility.visual {
                 settings.general.orientation === Orientation.VERTICAL
                 )
                 .style({
-                    'height': PixelConverter.toString(slicerBodyViewport.height),
-                    'width': `${ChicletSlicer.MaxImageWidth}%`,
+                    "height": PixelConverter.toString(slicerBodyViewport.height),
+                    "width": `${ChicletSlicer.MaxImageWidth}%`,
                 });
 
             let rowEnter = (rowSelection: Selection<any>) => {
@@ -449,14 +449,14 @@ module powerbi.extensibility.visual {
             rowSelection.selectAll("ul")
                 .remove();
             let ulItemElement: UpdateSelection<any> = rowSelection
-                .selectAll('ul')
+                .selectAll("ul")
                 .data((dataPoint: ChicletSlicerDataPoint) => {
                     return [dataPoint];
                 }, (d: ChicletSlicerDataPoint) => d.imageURL);
 
             ulItemElement
                 .enter()
-                .append('ul');
+                .append("ul");
 
             ulItemElement
                 .exit()
@@ -470,23 +470,23 @@ module powerbi.extensibility.visual {
 
             listItemElement
                 .enter()
-                .append('li')
+                .append("li")
                 .classed(ChicletSlicer.ItemContainerSelector.className, true)
                 .style({
-                    'margin-left': PixelConverter.toString(settings.slicerItemContainer.marginLeft)
+                    "margin-left": PixelConverter.toString(settings.slicerItemContainer.marginLeft)
                 });
 
             listItemElement
-                .append('img')
+                .append("img")
                 .classed(ChicletSlicer.SlicerImgWrapperSelector.className, true);
 
 
             listItemElement
-                .append('label')
+                .append("label")
                 .classed(ChicletSlicer.SlicerTextWrapperSelector.className, true)
                 .style({
-                    'font-size': PixelConverter.fromPoint(+settings.slicerText.textSize),
-                    'color': settings.slicerText.fontColor
+                    "font-size": PixelConverter.fromPoint(+settings.slicerText.textSize),
+                    "color": settings.slicerText.fontColor
                 })
                 .append("a")
                 .classed(ChicletSlicer.LabelTextSelector.className, true)
@@ -507,18 +507,18 @@ module powerbi.extensibility.visual {
 
             if (data && settings) {
                 this.slicerHeader
-                    .classed('hidden', !settings.header.show);
+                    .classed("hidden", !settings.header.show);
 
                 this.slicerHeader
                     .select(ChicletSlicer.HeaderTextSelector.selectorName)
                     .text(settings.header.title.trim())
                     .style({
-                        'border-style': ChicletSlicer.getBorderStyle(settings.header.outline),
-                        'border-color': settings.header.outlineColor,
-                        'border-width': ChicletSlicer.getBorderWidth(settings.header.outline, settings.header.outlineWeight),
-                        'color': settings.header.fontColor,
-                        'background-color': settings.header.background,
-                        'font-size': PixelConverter.fromPoint(+settings.header.textSize),
+                        "border-style": ChicletSlicer.getBorderStyle(settings.header.outline),
+                        "border-color": settings.header.outlineColor,
+                        "border-width": ChicletSlicer.getBorderWidth(settings.header.outline, settings.header.outlineWeight),
+                        "color": settings.header.fontColor,
+                        "background-color": settings.header.background,
+                        "font-size": PixelConverter.fromPoint(+settings.header.textSize),
                     });
 
                 this.slicerBody
@@ -553,19 +553,19 @@ module powerbi.extensibility.visual {
 
                 rowSelection
                     .style({
-                        'padding': PixelConverter.toString(settings.slicerText.padding)
+                        "padding": PixelConverter.toString(settings.slicerText.padding)
                     });
 
                 rowSelection
                     .selectAll(ChicletSlicer.SlicerImgWrapperSelector.selectorName)
                     .style({
-                        'max-height': settings.images.imageSplit + '%',
-                        'display': (dataPoint: ChicletSlicerDataPoint) => (dataPoint.imageURL)
-                            ? 'flex'
-                            : 'none'
+                        "max-height": settings.images.imageSplit + "%",
+                        "display": (dataPoint: ChicletSlicerDataPoint) => (dataPoint.imageURL)
+                            ? "flex"
+                            : "none"
                     })
                     .classed({
-                        'hidden': (dataPoint: ChicletSlicerDataPoint) => {
+                        "hidden": (dataPoint: ChicletSlicerDataPoint) => {
                             if (!(dataPoint.imageURL)) {
                                 return true;
                             }
@@ -574,34 +574,34 @@ module powerbi.extensibility.visual {
                                 return true;
                             }
                         },
-                        'stretchImage': settings.images.stretchImage,
-                        'bottomImage': settings.images.bottomImage
+                        "stretchImage": settings.images.stretchImage,
+                        "bottomImage": settings.images.bottomImage
                     })
-                    .attr('src', (d: ChicletSlicerDataPoint) => {
-                        return d.imageURL ? d.imageURL : '';
+                    .attr("src", (d: ChicletSlicerDataPoint) => {
+                        return d.imageURL ? d.imageURL : "";
                     });
 
                 rowSelection.selectAll(ChicletSlicer.SlicerTextWrapperSelector.selectorName)
-                    .style('height', (d: ChicletSlicerDataPoint): string => {
+                    .style("height", (d: ChicletSlicerDataPoint): string => {
                         let height: number = ChicletSlicer.MaxImageSplit;
                         if (d.imageURL) {
                             height -= settings.images.imageSplit;
                         }
                         return `${height}%`;
                     })
-                    .classed('hidden', (d: ChicletSlicerDataPoint) => {
+                    .classed("hidden", (d: ChicletSlicerDataPoint) => {
                         if (settings.images.imageSplit > ChicletSlicer.MaxImageSplitToHide) {
                             return true;
                         }
                     });
 
                 rowSelection.selectAll(ChicletSlicer.ItemContainerSelector.selectorName).style({
-                    'color': settings.slicerText.fontColor,
-                    'border-style': ChicletSlicer.getBorderStyle(settings.slicerText.outline),
-                    'border-color': settings.slicerText.outlineColor,
-                    'border-width': ChicletSlicer.getBorderWidth(settings.slicerText.outline, settings.slicerText.outlineWeight),
-                    'font-size': PixelConverter.fromPoint(+settings.slicerText.textSize),
-                    'border-radius': ChicletSlicer.getBorderRadius(settings.slicerText.borderStyle),
+                    "color": settings.slicerText.fontColor,
+                    "border-style": ChicletSlicer.getBorderStyle(settings.slicerText.outline),
+                    "border-color": settings.slicerText.outlineColor,
+                    "border-width": ChicletSlicer.getBorderWidth(settings.slicerText.outline, settings.slicerText.outlineWeight),
+                    "font-size": PixelConverter.fromPoint(+settings.slicerText.textSize),
+                    "border-radius": ChicletSlicer.getBorderRadius(settings.slicerText.borderStyle),
                 });
 
                 if (settings.slicerText.background) {
@@ -609,16 +609,16 @@ module powerbi.extensibility.visual {
                         settings.slicerText.background,
                         (ChicletSlicer.MaxTransparency - settings.slicerText.transparency) / ChicletSlicer.MaxTransparency);
 
-                    this.slicerBody.style('background-color', backgroundColor);
+                    this.slicerBody.style("background-color", backgroundColor);
                 }
                 else {
-                    this.slicerBody.style('background-color', null);
+                    this.slicerBody.style("background-color", null);
                 }
 
                 if (this.interactivityService && this.slicerBody) {
                     this.interactivityService.applySelectionStateToData(data.slicerDataPoints);
 
-                    let slicerBody: Selection<any> = this.slicerBody.attr('width', this.currentViewport.width),
+                    let slicerBody: Selection<any> = this.slicerBody.attr("width", this.currentViewport.width),
                         slicerItemContainers: Selection<any> = slicerBody.selectAll(ChicletSlicer.ItemContainerSelector.selectorName),
                         slicerItemLabels: Selection<any> = slicerBody.selectAll(ChicletSlicer.LabelTextSelector.selectorName),
                         slicerItemInputs: Selection<any> = slicerBody.selectAll(ChicletSlicer.InputSelector.selectorName),
@@ -683,7 +683,7 @@ module powerbi.extensibility.visual {
         }
 
         private getSearchHeaderHeight(): number {
-            return this.$searchHeader && this.$searchHeader.hasClass('show')
+            return this.$searchHeader && this.$searchHeader.hasClass("show")
                 ? this.$searchHeader.height()
                 : 0;
         }
@@ -706,8 +706,8 @@ module powerbi.extensibility.visual {
             let slicerViewport: IViewport = this.getSlicerBodyViewport(this.currentViewport);
             this.slicerBody
                 .style({
-                    'height': PixelConverter.toString(slicerViewport.height),
-                    'width': `${ChicletSlicer.MaxImageWidth}%`,
+                    "height": PixelConverter.toString(slicerViewport.height),
+                    "width": `${ChicletSlicer.MaxImageWidth}%`,
                 });
         }
 
@@ -727,7 +727,7 @@ module powerbi.extensibility.visual {
         }
 
         private static getBorderStyle(outlineElement: string): string {
-            return outlineElement === '0px' ? 'none' : 'solid';
+            return outlineElement === "0px" ? "none" : "solid";
         }
 
         public static getChicletTextProperties(textSize?: number): TextProperties {
@@ -739,18 +739,18 @@ module powerbi.extensibility.visual {
 
         private static getBorderWidth(outlineElement: string, outlineWeight: number): string {
             switch (outlineElement) {
-                case 'None':
-                    return '0px';
-                case 'BottomOnly':
-                    return '0px 0px ' + outlineWeight + 'px 0px';
-                case 'TopOnly':
-                    return outlineWeight + 'px 0px 0px 0px';
-                case 'TopBottom':
-                    return outlineWeight + 'px 0px ' + outlineWeight + 'px 0px';
-                case 'LeftRight':
-                    return '0px ' + outlineWeight + 'px 0px ' + outlineWeight + 'px';
-                case 'Frame':
-                    return outlineWeight + 'px';
+                case "None":
+                    return "0px";
+                case "BottomOnly":
+                    return "0px 0px " + outlineWeight + "px 0px";
+                case "TopOnly":
+                    return outlineWeight + "px 0px 0px 0px";
+                case "TopBottom":
+                    return outlineWeight + "px 0px " + outlineWeight + "px 0px";
+                case "LeftRight":
+                    return "0px " + outlineWeight + "px 0px " + outlineWeight + "px";
+                case "Frame":
+                    return outlineWeight + "px";
                 default:
                     return outlineElement.replace("1", outlineWeight.toString());
             }

@@ -83,8 +83,8 @@ module powerbi.extensibility.visual {
      * It can create lists containing either HTML or SVG elements.
      */
     export class TableView implements ITableView {
-        public static RowSelector: ClassAndSelector = createClassAndSelector('row');
-        public static CellSelector: ClassAndSelector = createClassAndSelector('cell');
+        public static RowSelector: ClassAndSelector = createClassAndSelector("row");
+        public static CellSelector: ClassAndSelector = createClassAndSelector("cell");
 
         private static defaultRowHeight = 0;
         private static defaultColumns = 1;
@@ -105,16 +105,16 @@ module powerbi.extensibility.visual {
             this.options = $.extend(true, {}, options);
 
             this.options.baseContainer
-                .style('overflow-y', 'auto')
-                .attr('drag-resize-disabled', true);
+                .style("overflow-y", "auto")
+                .attr("drag-resize-disabled", true);
 
             this.scrollContainer = options.baseContainer
-                .append('div')
-                .attr('class', 'scrollRegion');
+                .append("div")
+                .attr("class", "scrollRegion");
 
             this.visibleGroupContainer = this.scrollContainer
-                .append('div')
-                .attr('class', 'visibleGroup');
+                .append("div")
+                .attr("class", "visibleGroup");
 
             TableView.SetDefaultOptions(options);
         }
@@ -366,7 +366,7 @@ module powerbi.extensibility.visual {
 
             cellSelection
                 .enter()
-                .append('div')
+                .append("div")
                 .classed(TableView.CellSelector.className, true);
 
             cellSelection.call((selection: Selection<any>) => {
@@ -378,7 +378,7 @@ module powerbi.extensibility.visual {
             });
 
             cellSelection.style({
-                'height': (rowHeight > 0) ? rowHeight + 'px' : 'auto'
+                "height": (rowHeight > 0) ? rowHeight + "px" : "auto"
             });
 
             if (this.options.orientation === Orientation.VERTICAL) {
@@ -389,23 +389,23 @@ module powerbi.extensibility.visual {
                         realColumnNumber = i + 1;
                 }
 
-                cellSelection.style({ 'width': '100%' });
+                cellSelection.style({ "width": "100%" });
 
                 rowSelection
                     .style({
-                        'width': (options.columnWidth > 0)
-                            ? options.columnWidth + 'px'
-                            : (100 / realColumnNumber) + '%'
+                        "width": (options.columnWidth > 0)
+                            ? options.columnWidth + "px"
+                            : (100 / realColumnNumber) + "%"
                     });
             }
             else {
                 cellSelection.style({
-                    'width': (options.columnWidth > 0)
-                        ? options.columnWidth + 'px'
-                        : (100 / groupedData.totalColumns) + '%'
+                    "width": (options.columnWidth > 0)
+                        ? options.columnWidth + "px"
+                        : (100 / groupedData.totalColumns) + "%"
                 });
 
-                rowSelection.style({ 'width': null });
+                rowSelection.style({ "width": null });
             }
 
             cellSelection

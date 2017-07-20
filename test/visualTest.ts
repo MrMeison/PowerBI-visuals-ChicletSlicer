@@ -834,7 +834,7 @@ module powerbi.extensibility.visual.test {
                     (dataView.metadata.objects as any).header.fontColor = getSolidColorStructuralObject(color);
                     visualBuilder.updateFlushAllD3Transitions(dataView);
 
-                    assertColorsMatch(visualBuilder.slicerHeaderText.css('color'), color);
+                    assertColorsMatch(visualBuilder.slicerHeaderText.css("color"), color);
                 });
 
                 it("background color", () => {
@@ -843,7 +843,7 @@ module powerbi.extensibility.visual.test {
                     (dataView.metadata.objects as any).header.background = getSolidColorStructuralObject(color);
                     visualBuilder.updateFlushAllD3Transitions(dataView);
 
-                    assertColorsMatch(visualBuilder.slicerHeaderText.css('background-color'), color);
+                    assertColorsMatch(visualBuilder.slicerHeaderText.css("background-color"), color);
                 });
 
                 it("font size", () => {
@@ -853,7 +853,7 @@ module powerbi.extensibility.visual.test {
                     (dataView.metadata.objects as any).header.textSize = fontSize;
                     visualBuilder.updateFlushAllD3Transitions(dataView);
 
-                    expect(visualBuilder.slicerHeaderText.css('font-size')).toBe(expectedFontSize);
+                    expect(visualBuilder.slicerHeaderText.css("font-size")).toBe(expectedFontSize);
                 });
 
                 it("outline color", () => {
@@ -862,7 +862,7 @@ module powerbi.extensibility.visual.test {
                     (dataView.metadata.objects as any).header.outlineColor = getSolidColorStructuralObject(color);
                     visualBuilder.updateFlushAllD3Transitions(dataView);
 
-                    assertColorsMatch(visualBuilder.slicerHeaderText.css('border-color'), color);
+                    assertColorsMatch(visualBuilder.slicerHeaderText.css("border-color"), color);
                 });
 
                 it("outline weight", () => {
@@ -871,7 +871,7 @@ module powerbi.extensibility.visual.test {
                     (dataView.metadata.objects as any).header.outlineWeight = weight;
                     visualBuilder.updateFlushAllD3Transitions(dataView);
 
-                    expect(parseFloat(visualBuilder.slicerHeaderText.css('border-bottom-width'))).toBe(weight);
+                    expect(parseFloat(visualBuilder.slicerHeaderText.css("border-bottom-width"))).toBe(weight);
                 });
             });
 
@@ -898,7 +898,7 @@ module powerbi.extensibility.visual.test {
                                 .children("span.slicerText");
                         })
                         .forEach((element: JQuery) => {
-                            expect(element.css('font-size')).toBe(expectedFontSize);
+                            expect(element.css("font-size")).toBe(expectedFontSize);
                         });
                 });
 

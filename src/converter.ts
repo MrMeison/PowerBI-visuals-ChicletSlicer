@@ -45,12 +45,11 @@ module powerbi.extensibility.visual {
         public hasHighlights: boolean;
         private host: IVisualHost;
         public hasSelectionOverride: boolean;
-        private static selectedPropertyIdentifier: DataViewObjectPropertyIdentifier = { objectName: 'general', propertyName: 'selected' };
+        private static selectedPropertyIdentifier: DataViewObjectPropertyIdentifier = { objectName: "system", propertyName: "selected" };
         private data: ChicletSlicerColumns<any>;
 
         public constructor(dataView: DataView, host: IVisualHost) {
             const dataViewCategorical: DataViewCategorical = dataView.categorical;
-            debugger;
             this.category = ChicletSlicerColumns.getCategoryColumnByName(dataView, "Category");
             this.dataViewCategorical = dataViewCategorical;
             this.dataViewMetadata = dataView.metadata;
