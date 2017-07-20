@@ -221,7 +221,7 @@
                 }
             }
         },
-        "rows": {
+        "slicerText": {
             "displayName": "Chiclets",
             "displayNameKey": "Visual_Chiclets",
             "properties": {
