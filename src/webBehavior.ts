@@ -174,8 +174,7 @@ module powerbi.extensibility.visual {
                 return;
             }
 
-            const isSelected: boolean = _.some(
-                this.dataPoints,
+            const isSelected: boolean = this.dataPoints.some(
                 (dataPoint: ChicletSlicerDataPoint) => dataPoint.selected);
 
             if (!isSelected) {
