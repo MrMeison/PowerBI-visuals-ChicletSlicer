@@ -102,7 +102,7 @@ module powerbi.extensibility.visual {
 
         public constructor(options: TableViewViewOptions) {
             // make a copy of options so that it is not modified later by caller
-            this.options = $.extend(true, {}, options);
+            this.options = { ...options };
 
             this.options.baseContainer
                 .style("overflow-y", "auto")
@@ -172,7 +172,7 @@ module powerbi.extensibility.visual {
             this.setTotalRows();
 
             if (dataReset) {
-                $(this.options.baseContainer.node()).scrollTop(0);
+                (<HTMLElement>this.options.baseContainer.node()).scrollTop = 0;
             }
 
             return this;

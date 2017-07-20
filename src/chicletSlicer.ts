@@ -76,9 +76,9 @@ module powerbi.extensibility.visual {
     }
 
     export class ChicletSlicer implements IVisual {
-        private $root: JQuery;
-        private $searchHeader: JQuery;
-        private $searchInput: JQuery;
+        private root: HTMLElement;
+        private searchHeader: d3.Selection<any>;
+        private searchInput: d3.Selection<any>;
         private currentViewport: IViewport;
         private dataView: DataView;
         private slicerHeader: Selection<any>;
@@ -192,7 +192,7 @@ module powerbi.extensibility.visual {
             return slicerData;
         }
         constructor(options: VisualConstructorOptions) {
-            this.$root = $(options.element);
+            this.root = options.element;
 
             this.visualHost = options.host;
 
@@ -289,7 +289,7 @@ module powerbi.extensibility.visual {
         private updateInternal(resetScrollbarPosition: boolean) {
             let data = ChicletSlicer.converter(
                 this.dataView,
-                this.$searchInput.val(),
+                (<HTMLInputElement>this.searchInput.node()).value,
                 this.visualHost);
 
             if (!data) {
@@ -362,7 +362,7 @@ module powerbi.extensibility.visual {
                 .columns(this.settings.general.columns)
                 .data(
                 data.slicerDataPoints.filter(x => !x.filtered),
-                (d: ChicletSlicerDataPoint) => $.inArray(d, data.slicerDataPoints),
+                (d: ChicletSlicerDataPoint) => data.slicerDataPoints.indexOf(d),
                 resetScrollbarPosition)
                 .viewport(this.getSlicerBodyViewport(this.currentViewport))
                 .render();
@@ -372,7 +372,7 @@ module powerbi.extensibility.visual {
             let settings: ChicletSlicerSettings = this.settings,
                 slicerBodyViewport: IViewport = this.getSlicerBodyViewport(this.currentViewport);
 
-            let slicerContainer: Selection<any> = d3.select(this.$root.get(0))
+            let slicerContainer: Selection<any> = d3.select(this.root)
                 .append("div")
                 .classed(ChicletSlicer.ContainerSelector.className, true);
 
@@ -397,7 +397,7 @@ module powerbi.extensibility.visual {
                     "font-size": PixelConverter.fromPoint(+settings.header.textSize),
                 });
 
-            this.createSearchHeader($(slicerContainer.node()));
+            this.createSearchHeader(slicerContainer);
 
             this.slicerBody = slicerContainer
                 .append("div")
@@ -649,22 +649,24 @@ module powerbi.extensibility.visual {
             }
         }
 
-        private createSearchHeader(container: JQuery): void {
+        private createSearchHeader(container: d3.Selection<any>): void {
             let counter: number = 0;
+            this.searchHeader = container
+                .append("div")
+                .classed("searchHeader", true)
+                .classed("collapsed", true);
 
-            this.$searchHeader = $("<div>")
-                .appendTo(container)
-                .addClass("searchHeader")
-                .addClass("collapsed");
-
-            $("<div>").appendTo(this.$searchHeader)
+            this.searchHeader
+                .append("div")
                 .attr("title", "Search")
-                .addClass("search");
+                .classed("search", true);
 
-            this.$searchInput = $("<input>").appendTo(this.$searchHeader)
+
+            this.searchInput = this.searchHeader
+                .append("input")
                 .attr("type", "text")
                 .attr("drag-resize-disabled", "true")
-                .addClass("searchInput")
+                .classed("searchInput", true)
                 .on("input", () => this.visualHost.persistProperties(<VisualObjectInstancesToPersist>{
                     merge: [{
                         objectName: "system",
@@ -677,13 +679,13 @@ module powerbi.extensibility.visual {
         }
 
         private updateSearchHeader(): void {
-            this.$searchHeader.toggleClass("show", this.slicerData.slicerSettings.system.selfFilterEnabled);
-            this.$searchHeader.toggleClass("collapsed", !this.slicerData.slicerSettings.system.selfFilterEnabled);
+            this.searchHeader.classed("show", this.slicerData.slicerSettings.system.selfFilterEnabled);
+            this.searchHeader.classed("collapsed", !this.slicerData.slicerSettings.system.selfFilterEnabled);
         }
 
         private getSearchHeaderHeight(): number {
-            return this.$searchHeader && this.$searchHeader.hasClass("show")
-                ? this.$searchHeader.height()
+            return this.searchHeader && this.searchHeader.classed("show")
+                ? (<HTMLInputElement>this.searchHeader.node()).clientHeight
                 : 0;
         }
 
