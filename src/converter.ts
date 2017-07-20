@@ -135,6 +135,21 @@ module powerbi.extensibility.visual {
                         this.numberOfCategoriesSelectedInData++;
                     }
 
+                    // TODO: fill fields in one time
+                    // support hightlight
+                    if (this.dataViewCategorical.values) {
+                        // Series are either measures in the multi-measure case, or the single series otherwise
+                        for (let seriesIndex: number = 0; seriesIndex < this.dataViewCategorical.values.length; seriesIndex++) {
+                            let seriesData: any = dataViewCategorical.values[seriesIndex];
+                            if (seriesData.values[categoryIndex] != null) {
+                                if (seriesData.highlights) {
+                                    selectable = !(seriesData.highlights[categoryIndex] === null);
+                                    this.hasHighlights = true;
+                                }
+                            }
+                        }
+                    }
+
                     let categorySelectionId: ISelectionId = this.host.createSelectionIdBuilder()
                         .withCategory(this.category, categoryIndex)
                         .createSelectionId();

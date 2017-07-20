@@ -681,7 +681,7 @@ module powerbi.extensibility.visual.test {
 
                 it("search header is visible", (done) => {
                     dataView.metadata.objects = {
-                        general: {
+                        system: {
                             selfFilterEnabled: true
                         }
                     };
@@ -851,7 +851,6 @@ module powerbi.extensibility.visual.test {
 
                     (dataView.metadata.objects as any).header.textSize = fontSize;
                     visualBuilder.updateFlushAllD3Transitions(dataView);
-
                     expect(visualBuilder.slicerHeaderText.css("font-size")).toBe(expectedFontSize);
                 });
 
