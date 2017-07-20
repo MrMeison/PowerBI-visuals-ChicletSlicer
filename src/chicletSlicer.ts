@@ -166,7 +166,6 @@ module powerbi.extensibility.visual {
                 return;
             }
             let slicerData: ChicletSlicerData;
-            debugger;
             const converter: ChicletSlicerConverter = new ChicletSlicerConverter(dataView, visualHost);
             const settings: ChicletSlicerSettings = ChicletSlicerSettings.parse<ChicletSlicerSettings>(dataView);
             converter.convert();
