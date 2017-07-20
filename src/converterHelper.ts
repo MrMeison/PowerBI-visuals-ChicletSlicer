@@ -27,7 +27,7 @@
 module powerbi.extensibility.visual {
     import converterHelper = powerbi.extensibility.utils.dataview.converterHelper;
     export class ChicletSlicerColumns<T> {
-        public static getCategoricalValues(dataView: DataView): ChicletSlicerColumns<(DataViewValueColumn | DataViewCategoryColumn)[]> {
+        public static getCategoricalValues(dataView: DataView): ChicletSlicerColumns<any[]> {
             let categorical: DataViewCategorical = dataView && dataView.categorical;
             let categories: DataViewCategoricalColumn[] = categorical && categorical.categories || [];
             let values: DataViewValueColumns = categorical && categorical.values || <DataViewValueColumns>[];
