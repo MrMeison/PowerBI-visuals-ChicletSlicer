@@ -82,11 +82,11 @@ module powerbi.extensibility.visual {
                 let isInvertedSelectionMode: boolean = false;
                 let numberOfScopeIds: number;
 
-                if (objects && objects.general && objects.general.filter) {
+                if (objects && objects.system && objects.system.filter) {
                     if (!this.identityFields) {
                         return;
                     }
-                    let filter: SemanticFilter = <SemanticFilter>objects.general.filter;
+                    let filter: SemanticFilter = <SemanticFilter>objects.system.filter;
                 }
 
                 let hasSelection: boolean = undefined;
@@ -141,10 +141,10 @@ module powerbi.extensibility.visual {
 
                     this.dataPoints.push({
                         identity: categorySelectionId as powerbi.visuals.ISelectionId,
-                        category: this.data.Category[categoryIndex],
-                        imageURL: this.data.Image[categoryIndex],
-                        value: this.data.Values[categoryIndex],
-                        url: this.data.URL[categoryIndex],
+                        category: this.data.Category && this.data.Category[categoryIndex],
+                        imageURL: this.data.Image && this.data.Image[categoryIndex],
+                        value: this.data.Values && this.data.Values[categoryIndex],
+                        url: this.data.URL && this.data.URL[categoryIndex],
                         selected: false,
                         selectable: selectable
                     });

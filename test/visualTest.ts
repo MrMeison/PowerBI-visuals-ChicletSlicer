@@ -166,9 +166,7 @@ module powerbi.extensibility.visual.test {
                     const textProp: TextProperties = VisualClass.getChicletTextProperties(
                         PixelConverter.toPoint(slicerFontSize));
 
-                    const slicerTextDelta: number = textMeasurementService.estimateSvgTextBaselineDelta(textProp);
-
-                    expect(containerHeight).toBeGreaterThan(slicerFontSize + slicerTextDelta);
+                    expect(containerHeight).toBeGreaterThan(slicerFontSize + 1);
 
                     done();
                 });
@@ -581,6 +579,7 @@ module powerbi.extensibility.visual.test {
                     dataView.categorical.values.forEach((valueColumn: DataViewValueColumn) => {
                         valueColumn.highlights[highlightedIndex] = valueColumn.values[highlightedIndex];
                     });
+                    debugger;
 
                     dataView.metadata.objects = {
                         general: {
@@ -923,7 +922,7 @@ module powerbi.extensibility.visual.test {
                 it("default height in settings", (done) => {
 
                     visualBuilder.updateRenderTimeout(dataView, () => {
-                        expect(visualBuilder.visual.settings.slicerText.height).not.toEqual(0);
+                        expect(visualBuilder.settings().slicerText.height).not.toEqual(0);
                         done();
                     });
 
@@ -950,7 +949,7 @@ module powerbi.extensibility.visual.test {
                 it("default width in settings", (done) => {
 
                     visualBuilder.updateRenderTimeout(dataView, () => {
-                        expect(visualBuilder.visual.settings.slicerText.width).not.toEqual(0);
+                        expect(visualBuilder.settings().slicerText.width).not.toEqual(0);
                         done();
                     });
 

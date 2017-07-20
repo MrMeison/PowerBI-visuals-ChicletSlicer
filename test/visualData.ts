@@ -32,6 +32,7 @@ module powerbi.extensibility.visual.test {
 
     // powerbi.extensibility.utils.test
     import getRandomNumbers = powerbi.extensibility.utils.test.helpers.getRandomNumbers;
+    import TestDataViewBuilderCategoryColumnOptions = powerbi.extensibility.utils.test.dataViewBuilder.TestDataViewBuilderCategoryColumnOptions;
     import CustomizeColumnFn = powerbi.extensibility.utils.test.dataViewBuilder.CustomizeColumnFn;
     import TestDataViewBuilder = powerbi.extensibility.utils.test.dataViewBuilder.TestDataViewBuilder;
 
@@ -53,7 +54,7 @@ module powerbi.extensibility.visual.test {
 
         public getDataView(columnNames?: string[], customizeColumns?: CustomizeColumnFn): DataView {
             return this.createCategoricalDataViewBuilder([
-                {
+                <TestDataViewBuilderCategoryColumnOptions>{
                     source: {
                         displayName: ChicletSlicerData.ColumnCategory,
                         roles: { Category: true },

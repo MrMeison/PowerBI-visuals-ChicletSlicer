@@ -103,9 +103,12 @@ module powerbi.extensibility.visual.test {
         }
 
         public saveSelection(selectionIds): void {
-            return this.visual.settings.general.setSavedSelection(null, selectionIds);
+            return this.visual.settings.system.setSavedSelection(null, selectionIds);
         }
 
+        public get settings(): any {
+            return this.visual.settings;
+        }
         public getDataPoints(): ChicletSlicerDataPoint[] {
             return this.visual.behavior.dataPoints;
         }
@@ -118,7 +121,7 @@ module powerbi.extensibility.visual.test {
         }
 
         public getSavedSelection(): ISelectionId[] {
-            return this.visual["settings"]["systen"].getSavedSelection();
+            return this.visual["settings"]["system"].getSavedSelection();
         }
 
         public getSelectionState(): SelectionState {
