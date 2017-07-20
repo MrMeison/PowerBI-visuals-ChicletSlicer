@@ -95,7 +95,7 @@ module powerbi.extensibility.visual.test {
 
         public get slicerItemContainer(): JQuery {
             return this.visibleGroup
-                .find("div.row .cell:first .slicerItemContainer");
+                .find(".slicerItemContainer");
         }
 
         public get slicerItemImages(): JQuery {

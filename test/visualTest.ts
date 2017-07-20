@@ -579,7 +579,6 @@ module powerbi.extensibility.visual.test {
                     dataView.categorical.values.forEach((valueColumn: DataViewValueColumn) => {
                         valueColumn.highlights[highlightedIndex] = valueColumn.values[highlightedIndex];
                     });
-                    debugger;
 
                     dataView.metadata.objects = {
                         general: {
@@ -879,7 +878,7 @@ module powerbi.extensibility.visual.test {
                         expectedFontSize: string = "29.3333px";
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             textSize: fontSize
                         }
                     };
@@ -892,8 +891,8 @@ module powerbi.extensibility.visual.test {
                             return $(element)
                                 .children("ul")
                                 .children("li")
-                                .children("div.slicer-text-wrapper")
-                                .children("span.slicerText");
+                                .children(".slicer-text-wrapper")
+                                .children(".slicerText");
                         })
                         .forEach((element: JQuery) => {
                             expect(element.css("font-size")).toBe(expectedFontSize);
@@ -904,7 +903,7 @@ module powerbi.extensibility.visual.test {
                     const height: number = 50;
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             height
                         }
                     };
@@ -921,7 +920,7 @@ module powerbi.extensibility.visual.test {
                 it("default height in settings", (done) => {
 
                     visualBuilder.updateRenderTimeout(dataView, () => {
-                        expect(visualBuilder.settings().slicerText.height).not.toEqual(0);
+                        expect(visualBuilder.settings.slicerText.height).not.toEqual(0);
                         done();
                     });
 
@@ -931,7 +930,7 @@ module powerbi.extensibility.visual.test {
                     const width: number = 50;
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             width
                         }
                     };
@@ -948,7 +947,7 @@ module powerbi.extensibility.visual.test {
                 it("default width in settings", (done) => {
 
                     visualBuilder.updateRenderTimeout(dataView, () => {
-                        expect(visualBuilder.settings().slicerText.width).not.toEqual(0);
+                        expect(visualBuilder.settings.slicerText.width).not.toEqual(0);
                         done();
                     });
 
@@ -958,7 +957,7 @@ module powerbi.extensibility.visual.test {
                     const color: string = "#123234";
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             background: getSolidColorStructuralObject(color)
                         }
                     };
@@ -973,7 +972,7 @@ module powerbi.extensibility.visual.test {
                         transparency: number = (100 - transparencyPercent) / 100;
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             background: getSolidColorStructuralObject("#123234"),
                             transparency: transparencyPercent
                         }
@@ -991,7 +990,7 @@ module powerbi.extensibility.visual.test {
                     const color: string = "#123234";
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             selectedColor: getSolidColorStructuralObject(color)
                         }
                     };
@@ -1009,7 +1008,7 @@ module powerbi.extensibility.visual.test {
                     const color: string = "#123234";
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             unselectedColor: getSolidColorStructuralObject(color)
                         }
                     };
@@ -1025,7 +1024,7 @@ module powerbi.extensibility.visual.test {
                     const color: string = "#123234";
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             hoverColor: getSolidColorStructuralObject(color)
                         }
                     };
@@ -1034,8 +1033,8 @@ module powerbi.extensibility.visual.test {
 
                     let firstItem: JQuery = visualBuilder.slicerItemContainers.first(),
                         firstItemText: JQuery = firstItem
-                            .children("div.slicer-text-wrapper")
-                            .children("span.slicerText");
+                            .children(".slicer-text-wrapper")
+                            .children(".slicerText");
 
                     firstItem[0].dispatchEvent(new Event("mouseover"));
 
@@ -1046,7 +1045,7 @@ module powerbi.extensibility.visual.test {
                     const color: string = "#123234";
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             disabledColor: getSolidColorStructuralObject(color)
                         }
                     };
@@ -1082,13 +1081,12 @@ module powerbi.extensibility.visual.test {
                     const color: string = "#123234";
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             outlineColor: getSolidColorStructuralObject(color)
                         }
                     };
 
                     visualBuilder.updateFlushAllD3Transitions(dataView);
-
                     const firstItem: JQuery = visualBuilder.slicerItemContainers.first();
 
                     assertColorsMatch(firstItem.css("border-color"), color);
@@ -1098,7 +1096,7 @@ module powerbi.extensibility.visual.test {
                     const color: string = "#123234";
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             fontColor: getSolidColorStructuralObject(color)
                         }
                     };
@@ -1117,7 +1115,7 @@ module powerbi.extensibility.visual.test {
                     const secondColor: string = "#234512";
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             fontColor: getSolidColorStructuralObject(firstColor)
                         }
                     };
@@ -1132,7 +1130,7 @@ module powerbi.extensibility.visual.test {
                     firstItem[0].dispatchEvent(new Event("mouseout"));
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             fontColor: getSolidColorStructuralObject(secondColor)
                         }
                     };
@@ -1147,7 +1145,7 @@ module powerbi.extensibility.visual.test {
 
                 it("outline style", () => {
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             borderStyle: "Rounded"
                         }
                     };
@@ -1160,7 +1158,7 @@ module powerbi.extensibility.visual.test {
                             expect(convertAnySizeToPixel($(element).css("border-radius"))).toBeGreaterThan(0);
                         });
 
-                    (dataView.metadata.objects as any).rows.borderStyle = "Cut";
+                    (dataView.metadata.objects as any).slicerText.borderStyle = "Cut";
                     visualBuilder.updateFlushAllD3Transitions(dataView);
 
                     visualBuilder.slicerItemContainers
@@ -1169,7 +1167,7 @@ module powerbi.extensibility.visual.test {
                             expect(convertAnySizeToPixel($(element).css("border-radius"))).toBeGreaterThan(0);
                         });
 
-                    (dataView.metadata.objects as any).rows.borderStyle = "Square";
+                    (dataView.metadata.objects as any).slicerText.borderStyle = "Square";
                     visualBuilder.updateFlushAllD3Transitions(dataView);
 
                     visualBuilder.slicerItemContainers
@@ -1183,7 +1181,7 @@ module powerbi.extensibility.visual.test {
                     const padding: number = 8;
 
                     dataView.metadata.objects = {
-                        rows: {
+                        slicerText: {
                             padding
                         }
                     };
