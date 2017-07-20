@@ -75,7 +75,7 @@ module powerbi.extensibility.visual.test.helpers {
     }
 
     export function assertNumberMatch(actual: number, expected: number, round: number, invert?: boolean): boolean {
-        let matchers: Matcher = expect(roundTo(actual, round));
+        let matchers: Matcher<any> = expect(roundTo(actual, round));
 
         if (invert) {
             matchers = matchers.not;

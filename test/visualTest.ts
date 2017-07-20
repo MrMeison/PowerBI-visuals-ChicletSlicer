@@ -714,14 +714,14 @@ module powerbi.extensibility.visual.test {
 
                     visualBuilder.update(dataView);
 
-                    const searchHeader: HTMLElement = visualBuilder.searchHeader;
-                    const slicerHeaderText: HTMLElement = visualBuilder.slicerHeaderText;
+                    const searchHeader: JQuery = visualBuilder.searchHeader;
+                    const slicerHeaderText: JQuery = visualBuilder.slicerHeaderText;
 
                     const actualValue = visualBuilder.viewport.height -
                         (searchHeader.height() +
                         slicerHeaderText.height() +
-                        dataView.metadata.objects.header.outlineWeight +
-                        dataView.metadata.objects.header.borderBottomWidth);
+                        <number>dataView.metadata.objects.header.outlineWeight +
+                        <number>dataView.metadata.objects.header.borderBottomWidth);
 
                     const expectedValue = visualBuilder.slicerBody.height();
 
@@ -1277,7 +1277,7 @@ module powerbi.extensibility.visual.test {
                 checkElement(
                     visualBuilder,
                     dataView,
-                    TableView.RowSelector.selector,
+                    TableView.RowSelector.selectorName,
                     done);
             });
 
@@ -1285,7 +1285,7 @@ module powerbi.extensibility.visual.test {
                 checkElement(
                     visualBuilder,
                     dataView,
-                    TableView.CellSelector.selector,
+                    TableView.CellSelector.selectorName,
                     done);
             });
 
@@ -1293,7 +1293,7 @@ module powerbi.extensibility.visual.test {
                 checkElement(
                     visualBuilder,
                     dataView,
-                    VisualClass.ItemContainerSelector.selector,
+                    VisualClass.ItemContainerSelector.selectorName,
                     done);
             });
 
@@ -1301,7 +1301,7 @@ module powerbi.extensibility.visual.test {
                 checkElement(
                     visualBuilder,
                     dataView,
-                    VisualClass.SlicerImgWrapperSelector.selector,
+                    VisualClass.SlicerImgWrapperSelector.selectorName,
                     done);
             });
 
@@ -1309,7 +1309,7 @@ module powerbi.extensibility.visual.test {
                 checkElement(
                     visualBuilder,
                     dataView,
-                    VisualClass.SlicerTextWrapperSelector.selector,
+                    VisualClass.SlicerTextWrapperSelector.selectorName,
                     done);
             });
 
