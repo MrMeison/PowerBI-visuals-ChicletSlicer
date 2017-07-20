@@ -33,6 +33,7 @@ module powerbi.extensibility.visual {
 
     export class ChicletSlicerSettings extends DataViewObjectsParser {
         general: GeneralSettings = new GeneralSettings();
+        system: SystemSettings = new SystemSettings();
         header: HeaderSettings = new HeaderSettings();
         headerText: HeaderTextSettings = new HeaderTextSettings();
         slicerText: SlicerTextSettings = new SlicerTextSettings();
@@ -47,8 +48,15 @@ module powerbi.extensibility.visual {
         multiselect: boolean = true;
         forcedSelection: boolean = false;
         showDisabled: string = ChicletSlicerShowDisabled.INPLACE;
+    }
+
+    export class SystemSettings {
         selection: string = null;
+        filter: string = null;
+        selected: boolean = false;
         selfFilterEnabled: boolean = false;
+        selfFilter: string = null;
+        formatString: string = null;
         public getSavedSelection(): string[] {
             try {
                 return JSON.parse(this.selection) || [];

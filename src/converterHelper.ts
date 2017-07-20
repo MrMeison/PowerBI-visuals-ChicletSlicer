@@ -27,15 +27,17 @@
 module powerbi.extensibility.visual {
     import converterHelper = powerbi.extensibility.utils.dataview.converterHelper;
     export class ChicletSlicerColumns<T> {
-        public static getCategoricalValues(dataView: DataView): ChicletSlicerColumns<any> {
+        public static getCategoricalValues(dataView: DataView): ChicletSlicerColumns<(DataViewValueColumn | DataViewCategoryColumn)[]> {
             let categorical: DataViewCategorical = dataView && dataView.categorical;
             let categories: DataViewCategoricalColumn[] = categorical && categorical.categories || [];
             let values: DataViewValueColumns = categorical && categorical.values || <DataViewValueColumns>[];
             let series: PrimitiveValue[] = categorical && values.source && this.getSeriesValues(dataView);
-            return categorical && _.mapValues(new this<any[]>(), (n, i) =>
-                (<DataViewCategoricalColumn[]>_.toArray(categories)).concat(_.toArray(values))
-                    .filter(x => x.source.roles && x.source.roles[i]).map(x => x.values)[0]
-                || values.source && values.source.roles && values.source.roles[i] && series);
+            return categorical && _.mapValues(new this<(DataViewValueColumn | DataViewCategoryColumn)[]>(),
+                (n, i) =>
+                    (<(DataViewValueColumn | DataViewCategoryColumn)[]>_.toArray(categories)).concat(_.toArray(values))
+                        .filter((x: DataViewValueColumn | DataViewCategoryColumn) => x.source.roles && x.source.roles[i])
+                        .map((x: DataViewValueColumn | DataViewCategoryColumn) => x.values)[0]
+                    || values.source && values.source.roles && values.source.roles[i] && series);
         }
         public static getSeriesValues(dataView: DataView): PrimitiveValue[] {
             return dataView && dataView.categorical && dataView.categorical.values

@@ -171,7 +171,7 @@ module powerbi.extensibility.visual {
             const settings: ChicletSlicerSettings = ChicletSlicerSettings.parse<ChicletSlicerSettings>(dataView);
             converter.convert();
 
-            if (settings.general.selfFilterEnabled && searchText) {
+            if (settings.system.selfFilterEnabled && searchText) {
                 searchText = searchText.toLowerCase();
                 converter.dataPoints.forEach(x => x.filtered = x.category.toLowerCase().indexOf(searchText) < 0);
             }
@@ -279,6 +279,9 @@ module powerbi.extensibility.visual {
         }
 
         public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstanceEnumeration {
+            if (options.objectName === "system") {
+                return [];
+            }
             return ChicletSlicerSettings.enumerateObjectInstances(
                 this.settings || ChicletSlicerSettings.getDefault(),
                 options);
@@ -295,11 +298,11 @@ module powerbi.extensibility.visual {
 
                 return;
             }
-            data.slicerSettings.general.setSavedSelection = (filter: ISemanticFilter, selectionIds: string[]): void => {
+            data.slicerSettings.system.setSavedSelection = (filter: ISemanticFilter, selectionIds: string[]): void => {
                 this.isSelectionSaved = true;
                 this.visualHost.persistProperties(<VisualObjectInstancesToPersist>{
                     merge: [{
-                        objectName: "general",
+                        objectName: "system",
                         selector: null,
                         properties: {
                             // filter: filter || null,
@@ -316,7 +319,7 @@ module powerbi.extensibility.visual {
                 if (this.isSelectionSaved) {
                     this.isSelectionLoaded = true;
                 } else {
-                    this.isSelectionLoaded = this.slicerData.slicerSettings.general.selection === data.slicerSettings.general.selection;
+                    this.isSelectionLoaded = this.slicerData.slicerSettings.system.selection === data.slicerSettings.system.selection;
                 }
             } else {
                 this.isSelectionLoaded = false;
@@ -665,7 +668,7 @@ module powerbi.extensibility.visual {
                 .addClass("searchInput")
                 .on("input", () => this.visualHost.persistProperties(<VisualObjectInstancesToPersist>{
                     merge: [{
-                        objectName: "general",
+                        objectName: "system",
                         selector: null,
                         properties: {
                             counter: counter++
@@ -675,8 +678,8 @@ module powerbi.extensibility.visual {
         }
 
         private updateSearchHeader(): void {
-            this.$searchHeader.toggleClass("show", this.slicerData.slicerSettings.general.selfFilterEnabled);
-            this.$searchHeader.toggleClass("collapsed", !this.slicerData.slicerSettings.general.selfFilterEnabled);
+            this.$searchHeader.toggleClass("show", this.slicerData.slicerSettings.system.selfFilterEnabled);
+            this.$searchHeader.toggleClass("collapsed", !this.slicerData.slicerSettings.system.selfFilterEnabled);
         }
 
         private getSearchHeaderHeight(): number {
@@ -688,7 +691,7 @@ module powerbi.extensibility.visual {
         private getSlicerBodyViewport(currentViewport: IViewport): IViewport {
             let settings: ChicletSlicerSettings = this.settings,
                 headerHeight: number = (settings.header.show) ? this.getHeaderHeight() : 0,
-                searchHeight: number = (settings.general.selfFilterEnabled) ? this.getSearchHeaderHeight() : 0,
+                searchHeight: number = (settings.system.selfFilterEnabled) ? this.getSearchHeaderHeight() : 0,
                 borderHeight: number = settings.header.outlineWeight,
                 height: number = currentViewport.height - (headerHeight + searchHeight + borderHeight + settings.header.borderBottomWidth),
                 width: number = currentViewport.width - ChicletSlicer.WidthOfScrollbar;

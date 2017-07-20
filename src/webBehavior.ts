@@ -196,7 +196,7 @@ module powerbi.extensibility.visual {
         }
 
         public loadSelection(): void {
-            const savedSelectionIds: ISelectionId[] = this.slicerSettings.general.getSavedSelection();
+            const savedSelectionIds: ISelectionId[] = this.slicerSettings.system.getSavedSelection();
 
             if (savedSelectionIds.length) {
                 this.selectionHandler.handleClearSelection();
@@ -233,7 +233,7 @@ module powerbi.extensibility.visual {
 
             this.selectionHandler.applySelectionFilter();
 
-            this.slicerSettings.general.setSavedSelection(filter, selectionIdKeys);
+            this.slicerSettings.system.setSavedSelection(filter, selectionIdKeys);
         }
 
         public renderSelection(hasSelection: boolean): void {
