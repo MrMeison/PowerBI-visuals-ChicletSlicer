@@ -202,7 +202,7 @@ module powerbi.extensibility.visual.test {
 
             it("negative chiclet rows number should behave like 0 rows (auto) when orientation is vertical", (done) => {
                 dataView.metadata.objects = {
-                    general: {
+                    slicer: {
                         orientation: "Vertical",
                         rows: -1
                     }
@@ -213,7 +213,7 @@ module powerbi.extensibility.visual.test {
 
             it("negative chiclet rows number should behave like 0 rows (auto) when orientation is horizontal", (done) => {
                 dataView.metadata.objects = {
-                    general: {
+                    slicer: {
                         orientation: "Horizontal",
                         rows: -1
                     }
@@ -224,7 +224,7 @@ module powerbi.extensibility.visual.test {
 
             it("chiclet rows number > 1000 should behave like 1000 rows (auto) when orientation is vertical", (done) => {
                 dataView.metadata.objects = {
-                    general: {
+                    slicer: {
                         orientation: "Vertical",
                         rows: 10000
                     }
@@ -235,7 +235,7 @@ module powerbi.extensibility.visual.test {
 
             it("chiclet rows number > 1000 should behave like 1000 rows (auto) when orientation is horizontal", (done) => {
                 dataView.metadata.objects = {
-                    general: {
+                    slicer: {
                         orientation: "Horizontal",
                         rows: 10000
                     }
@@ -252,8 +252,8 @@ module powerbi.extensibility.visual.test {
                     .children("div.row")
                     .length;
 
-                (dataView.metadata.objects as any).general.orientation = orientation;
-                (dataView.metadata.objects as any).general.rows = expectedNumber;
+                (dataView.metadata.objects as any).slicer.orientation = orientation;
+                (dataView.metadata.objects as any).slicer.rows = expectedNumber;
 
                 visualBuilder.updateRenderTimeout(dataView, () => {
                     const chicletTotalRows0: number = visualBuilder
@@ -269,7 +269,7 @@ module powerbi.extensibility.visual.test {
 
             it("negative chiclet columns number should behave like 0 columns (auto) when orientation is vertical", (done) => {
                 dataView.metadata.objects = {
-                    general: {
+                    slicer: {
                         orientation: "Vertical",
                         columns: -1
                     }
@@ -280,7 +280,7 @@ module powerbi.extensibility.visual.test {
 
             it("negative chiclet columns number should behave like 0 columns (auto) when orientation is horizontal", (done) => {
                 dataView.metadata.objects = {
-                    general: {
+                    slicer: {
                         orientation: "Horizontal",
                         columns: -1
                     }
@@ -291,7 +291,7 @@ module powerbi.extensibility.visual.test {
 
             it("chiclet columns number > 1000 should behave like 1000 columns (auto) when orientation is vertical", (done) => {
                 dataView.metadata.objects = {
-                    general: {
+                    slicer: {
                         orientation: "Vertical",
                         columns: 10000
                     }
@@ -302,7 +302,7 @@ module powerbi.extensibility.visual.test {
 
             it("chiclet columns number > 1000 should behave like 1000 columns (auto) when orientation is horizontal", (done) => {
                 dataView.metadata.objects = {
-                    general: {
+                    slicer: {
                         orientation: "Horizontal",
                         columns: 10000
                     }
@@ -321,8 +321,8 @@ module powerbi.extensibility.visual.test {
                     .children(".cell")
                     .length;
 
-                (dataView.metadata.objects as any).general.orientation = orientation;
-                (dataView.metadata.objects as any).general.сolumns = expectedNumber;
+                (dataView.metadata.objects as any).slicer.orientation = orientation;
+                (dataView.metadata.objects as any).slicer.сolumns = expectedNumber;
 
                 visualBuilder.updateRenderTimeout(dataView, () => {
                     const chicletTotalColumns0: number = visualBuilder
@@ -409,7 +409,7 @@ module powerbi.extensibility.visual.test {
 
                 it("saved chiclet selection is received", (done) => {
                     dataView.metadata.objects = {
-                        system: {
+                        general: {
                             selection: JSON.stringify(selectionId)
                         }
                     };
@@ -443,7 +443,7 @@ module powerbi.extensibility.visual.test {
 
                 it("a chiclet should be selected after the loading if `forcedSelection` is true", (done) => {
                     dataView.metadata.objects = {
-                        general: {
+                        slicer: {
                             forcedSelection: true
                         }
                     };
@@ -471,7 +471,7 @@ module powerbi.extensibility.visual.test {
                         amountOfItems: number = categories.length;
 
                     dataView.metadata.objects = {
-                        general: {
+                        slicer: {
                             columns: amountOfItems,
                             rows: amountOfItems
                         }
@@ -517,7 +517,7 @@ module powerbi.extensibility.visual.test {
                     dataView = defaultDataViewBuilder.getDataView();
 
                     dataView.metadata.objects = {
-                        general: {
+                        slicer: {
                             columns: valueCount,
                             rows: Math.round(valueCount / 2),
                             orientation: "Horizontal"
@@ -528,7 +528,7 @@ module powerbi.extensibility.visual.test {
 
                     expect(visualBuilder.visibleGroupRows.length).toBe(1);
 
-                    (dataView.metadata.objects as any).general.orientation = "Vertical";
+                    (dataView.metadata.objects as any).slicer.orientation = "Vertical";
                     visualBuilder.updateFlushAllD3Transitions(dataView);
 
                     expect(visualBuilder.visibleGroupRows.length).toBe(2);
@@ -538,7 +538,7 @@ module powerbi.extensibility.visual.test {
                     const columns: number = Math.min(dataView.categorical.categories[0].values.length, 5);
 
                     dataView.metadata.objects = {
-                        general: {
+                        slicer: {
                             columns,
                             orientation: "Horizontal"
                         }
@@ -557,7 +557,7 @@ module powerbi.extensibility.visual.test {
                     const rows: number = Math.min(dataView.categorical.categories[0].values.length, 5);
 
                     dataView.metadata.objects = {
-                        general: {
+                        slicer: {
                             rows,
                             columns: 1,
                             orientation: "Horizontal"
@@ -581,7 +581,7 @@ module powerbi.extensibility.visual.test {
                     });
 
                     dataView.metadata.objects = {
-                        general: {
+                        slicer: {
                             columns: 5,
                             orientation: "Horizontal",
                             showDisabled: "Inplace"
@@ -612,7 +612,7 @@ module powerbi.extensibility.visual.test {
                             }
                         });
 
-                    (dataView.metadata.objects as any).general.showDisabled = "Bottom";
+                    (dataView.metadata.objects as any).slicer.showDisabled = "Bottom";
                     visualBuilder.updateFlushAllD3Transitions(dataView);
 
                     visualBuilder.visibleGroupCells
@@ -629,7 +629,7 @@ module powerbi.extensibility.visual.test {
                                 index !== 0);
                         });
 
-                    (dataView.metadata.objects as any).general.showDisabled = "Hide";
+                    (dataView.metadata.objects as any).slicer.showDisabled = "Hide";
                     visualBuilder.updateFlushAllD3Transitions(dataView);
 
                     expect(visualBuilder.visibleGroupCells.length).toBe(1);
@@ -660,7 +660,7 @@ module powerbi.extensibility.visual.test {
 
                     dataView.categorical.categories[0].values = valuesCategoryData;
                     dataView.metadata.objects = {
-                        general: {
+                        slicer: {
                             columns: 3,
                             orientation: "Horizontal",
                             showDisabled: "Bottom"
@@ -680,7 +680,7 @@ module powerbi.extensibility.visual.test {
 
                 it("search header is visible", (done) => {
                     dataView.metadata.objects = {
-                        system: {
+                        general: {
                             selfFilterEnabled: true
                         }
                     };
@@ -697,7 +697,7 @@ module powerbi.extensibility.visual.test {
 
                 it("height of slicerBody must consider height of header and height of search", (done) => {
                     dataView.metadata.objects = {
-                        general: {
+                        slicer: {
                             columns: 1,
                             rows: 0,
                             orientation: "Vertical"
@@ -707,7 +707,7 @@ module powerbi.extensibility.visual.test {
                             outlineWeight: 1,
                             borderBottomWidth: 1
                         },
-                        system: {
+                        general: {
                             selfFilterEnabled: true
                         }
                     };
@@ -732,7 +732,7 @@ module powerbi.extensibility.visual.test {
                 describe("Multi selection", () => {
                     beforeEach(() => {
                         dataView.metadata.objects = {
-                            general: {
+                            slicer: {
                                 multiselect: true
                             }
                         };
@@ -1062,7 +1062,7 @@ module powerbi.extensibility.visual.test {
                         valueColumn.highlights[highlightedIndex] = valueColumn.values[highlightedIndex];
                     });
 
-                    (dataView.metadata.objects as any).general = {
+                    (dataView.metadata.objects as any).slicer = {
                         showDisabled: "Inplace",
                         columns: dataView.categorical.categories[0].values.length
                     };

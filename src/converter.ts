@@ -45,7 +45,7 @@ module powerbi.extensibility.visual {
         public hasHighlights: boolean;
         private host: IVisualHost;
         public hasSelectionOverride: boolean;
-        private static selectedPropertyIdentifier: DataViewObjectPropertyIdentifier = { objectName: "system", propertyName: "selected" };
+        private static selectedPropertyIdentifier: DataViewObjectPropertyIdentifier = { objectName: "general", propertyName: "selected" };
         private data: ChicletSlicerColumns<any>;
 
         public constructor(dataView: DataView, host: IVisualHost) {
@@ -82,11 +82,11 @@ module powerbi.extensibility.visual {
                 let isInvertedSelectionMode: boolean = false;
                 let numberOfScopeIds: number;
 
-                if (objects && objects.system && objects.system.filter) {
+                if (objects && objects.general && objects.general.filter) {
                     if (!this.identityFields) {
                         return;
                     }
-                    let filter: SemanticFilter = <SemanticFilter>objects.system.filter;
+                    let filter: SemanticFilter = <SemanticFilter>objects.general.filter;
                 }
 
                 let hasSelection: boolean = undefined;

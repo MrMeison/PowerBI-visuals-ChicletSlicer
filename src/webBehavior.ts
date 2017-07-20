@@ -117,7 +117,7 @@ module powerbi.extensibility.visual {
                         }
                     });
 
-                if (settings.general.forcedSelection && selectedIndexes.length === 1) {
+                if (settings.slicer.forcedSelection && selectedIndexes.length === 1) {
                     let availableDataPoints: ChicletSlicerDataPoint[] = this.dataPoints
                         .map((dataPoint: ChicletSlicerDataPoint, index: number) => {
                             if (!dataPoint.filtered) {
@@ -131,7 +131,7 @@ module powerbi.extensibility.visual {
                     }
                 }
 
-                if ((d3.event as MouseEvent).altKey && settings.general.multiselect) {
+                if ((d3.event as MouseEvent).altKey && settings.slicer.multiselect) {
                     let selIndex: number = selectedIndexes.length > 0
                         ? (selectedIndexes[selectedIndexes.length - 1])
                         : 0;
@@ -145,7 +145,7 @@ module powerbi.extensibility.visual {
                     for (let i: number = selIndex; i <= index; i++) {
                         selectionHandler.handleSelection(this.dataPoints[i], true /* isMultiSelect */);
                     }
-                } else if (((d3.event as MouseEvent).ctrlKey || (d3.event as MouseEvent).metaKey) && settings.general.multiselect) {
+                } else if (((d3.event as MouseEvent).ctrlKey || (d3.event as MouseEvent).metaKey) && settings.slicer.multiselect) {
                     selectionHandler.handleSelection(dataPoint, true /* isMultiSelect */);
                 } else {
                     selectionHandler.handleSelection(dataPoint, false /* isMultiSelect */);
@@ -157,7 +157,7 @@ module powerbi.extensibility.visual {
             slicerClear.on("click", (d: SelectableDataPoint) => {
                 const settings: ChicletSlicerSettings = this.slicerSettings;
 
-                if (settings.general.forcedSelection) {
+                if (settings.slicer.forcedSelection) {
                     return false;
                 }
 
@@ -170,7 +170,7 @@ module powerbi.extensibility.visual {
         }
 
         private forceSelection(): void {
-            if (!this.slicerSettings.general.forcedSelection) {
+            if (!this.slicerSettings.slicer.forcedSelection) {
                 return;
             }
 
@@ -193,7 +193,7 @@ module powerbi.extensibility.visual {
         }
 
         public loadSelection(): void {
-            const savedSelectionIds: ISelectionId[] = this.slicerSettings.system.getSavedSelection();
+            const savedSelectionIds: ISelectionId[] = this.slicerSettings.general.getSavedSelection();
 
             if (savedSelectionIds.length) {
                 this.selectionHandler.handleClearSelection();
@@ -230,7 +230,7 @@ module powerbi.extensibility.visual {
 
             this.selectionHandler.applySelectionFilter();
 
-            this.slicerSettings.system.setSavedSelection(filter, selectionIdKeys);
+            this.slicerSettings.general.setSavedSelection(filter, selectionIdKeys);
         }
 
         public renderSelection(hasSelection: boolean): void {

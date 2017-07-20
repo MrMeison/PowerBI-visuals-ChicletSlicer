@@ -33,7 +33,7 @@ module powerbi.extensibility.visual {
 
     export class ChicletSlicerSettings extends DataViewObjectsParser {
         general: GeneralSettings = new GeneralSettings();
-        system: SystemSettings = new SystemSettings();
+        slicer: SlicerSettings = new SlicerSettings();
         header: HeaderSettings = new HeaderSettings();
         headerText: HeaderTextSettings = new HeaderTextSettings();
         slicerText: SlicerTextSettings = new SlicerTextSettings();
@@ -42,21 +42,7 @@ module powerbi.extensibility.visual {
     }
 
     export class GeneralSettings {
-        orientation: string = Orientation.VERTICAL;
-        columns: number = 3;
-        rows: number = 0;
-        multiselect: boolean = true;
-        forcedSelection: boolean = false;
-        showDisabled: string = ChicletSlicerShowDisabled.INPLACE;
-    }
-
-    export class SystemSettings {
         selection: string = null;
-        filter: string = null;
-        selected: boolean = false;
-        selfFilterEnabled: boolean = false;
-        selfFilter: string = null;
-        formatString: string = null;
         public getSavedSelection(): string[] {
             try {
                 return JSON.parse(this.selection) || [];
@@ -66,6 +52,18 @@ module powerbi.extensibility.visual {
         }
 
         setSavedSelection: (filter: ISemanticFilter, selectionIds: string[]) => void;
+        filter: string = null;
+        selfFilterEnabled: boolean = false;
+        selfFilter: string = null;
+    }
+
+    export class SlicerSettings {
+        orientation: string = Orientation.VERTICAL;
+        columns: number = 3;
+        rows: number = 0;
+        multiselect: boolean = true;
+        forcedSelection: boolean = false;
+        showDisabled: string = ChicletSlicerShowDisabled.INPLACE;
     }
 
     export class HeaderSettings {

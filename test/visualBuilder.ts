@@ -103,7 +103,7 @@ module powerbi.extensibility.visual.test {
         }
 
         public saveSelection(selectionIds): void {
-            return this.visual.settings.system.setSavedSelection(null, selectionIds);
+            return this.visual.settings.general.setSavedSelection(null, selectionIds);
         }
 
         public get settings(): any {
@@ -121,12 +121,12 @@ module powerbi.extensibility.visual.test {
         }
 
         public getSavedSelection(): ISelectionId[] {
-            return this.visual["settings"]["system"].getSavedSelection();
+            return this.visual["settings"]["general"].getSavedSelection();
         }
 
         public getSelectionState(): SelectionState {
             return {
-                items: this.visual["settings"]["system"]["selection"],
+                items: this.visual["settings"]["general"]["selection"],
                 state: this.visual["isSelectionSaved"],
             };
         }

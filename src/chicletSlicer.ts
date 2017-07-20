@@ -170,7 +170,7 @@ module powerbi.extensibility.visual {
             const settings: ChicletSlicerSettings = ChicletSlicerSettings.parse<ChicletSlicerSettings>(dataView);
             converter.convert();
 
-            if (settings.system.selfFilterEnabled && searchText) {
+            if (settings.general.selfFilterEnabled && searchText) {
                 searchText = searchText.toLowerCase();
                 converter.dataPoints.forEach(x => x.filtered = x.category.toLowerCase().indexOf(searchText) < 0);
             }
@@ -278,7 +278,7 @@ module powerbi.extensibility.visual {
         }
 
         public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstanceEnumeration {
-            if (options.objectName === "system") {
+            if (options.objectName === "general") {
                 return [];
             }
             return ChicletSlicerSettings.enumerateObjectInstances(
@@ -297,11 +297,11 @@ module powerbi.extensibility.visual {
 
                 return;
             }
-            data.slicerSettings.system.setSavedSelection = (filter: ISemanticFilter, selectionIds: string[]): void => {
+            data.slicerSettings.general.setSavedSelection = (filter: ISemanticFilter, selectionIds: string[]): void => {
                 this.isSelectionSaved = true;
                 this.visualHost.persistProperties(<VisualObjectInstancesToPersist>{
                     merge: [{
-                        objectName: "system",
+                        objectName: "general",
                         selector: null,
                         properties: {
                             // filter: filter || null,
@@ -318,7 +318,7 @@ module powerbi.extensibility.visual {
                 if (this.isSelectionSaved) {
                     this.isSelectionLoaded = true;
                 } else {
-                    this.isSelectionLoaded = this.slicerData.slicerSettings.system.selection === data.slicerSettings.system.selection;
+                    this.isSelectionLoaded = this.slicerData.slicerSettings.general.selection === data.slicerSettings.general.selection;
                 }
             } else {
                 this.isSelectionLoaded = false;
@@ -331,9 +331,9 @@ module powerbi.extensibility.visual {
             this.updateSearchHeader();
             this.updateSlicerBodyDimensions();
 
-            if (this.settings.general.showDisabled === ChicletSlicerShowDisabled.BOTTOM) {
+            if (this.settings.slicer.showDisabled === ChicletSlicerShowDisabled.BOTTOM) {
                 data.slicerDataPoints = _.sortBy(data.slicerDataPoints, [x => !x.selectable]);
-            } else if (this.settings.general.showDisabled === ChicletSlicerShowDisabled.HIDE) {
+            } else if (this.settings.slicer.showDisabled === ChicletSlicerShowDisabled.HIDE) {
                 data.slicerDataPoints = data.slicerDataPoints.filter(x => x.selectable);
             }
 
@@ -357,9 +357,9 @@ module powerbi.extensibility.visual {
             this.tableView
                 .rowHeight(this.settings.slicerText.height)
                 .columnWidth(this.settings.slicerText.width)
-                .orientation(this.settings.general.orientation)
-                .rows(this.settings.general.rows)
-                .columns(this.settings.general.columns)
+                .orientation(this.settings.slicer.orientation)
+                .rows(this.settings.slicer.rows)
+                .columns(this.settings.slicer.columns)
                 .data(
                 data.slicerDataPoints.filter(x => !x.filtered),
                 (d: ChicletSlicerDataPoint) => data.slicerDataPoints.indexOf(d),
@@ -404,10 +404,10 @@ module powerbi.extensibility.visual {
                 .classed(ChicletSlicer.BodySelector.className, true)
                 .classed(
                 ChicletSlicer.SlicerBodyHorizontalSelector.className,
-                settings.general.orientation === Orientation.HORIZONTAL)
+                settings.slicer.orientation === Orientation.HORIZONTAL)
                 .classed(
                 ChicletSlicer.SlicerBodyVerticalSelector.className,
-                settings.general.orientation === Orientation.VERTICAL
+                settings.slicer.orientation === Orientation.VERTICAL
                 )
                 .style({
                     "height": PixelConverter.toString(slicerBodyViewport.height),
@@ -429,9 +429,9 @@ module powerbi.extensibility.visual {
             let tableViewOptions: TableViewViewOptions = {
                 rowHeight: this.getRowHeight(),
                 columnWidth: this.settings.slicerText.width,
-                orientation: this.settings.general.orientation,
-                rows: this.settings.general.rows,
-                columns: this.settings.general.columns,
+                orientation: this.settings.slicer.orientation,
+                rows: this.settings.slicer.rows,
+                columns: this.settings.slicer.columns,
                 enter: rowEnter,
                 exit: rowExit,
                 update: rowUpdate,
@@ -523,10 +523,10 @@ module powerbi.extensibility.visual {
                 this.slicerBody
                     .classed(
                     ChicletSlicer.SlicerBodyHorizontalSelector.className,
-                    settings.general.orientation === Orientation.HORIZONTAL)
+                    settings.slicer.orientation === Orientation.HORIZONTAL)
                     .classed(
                     ChicletSlicer.SlicerBodyVerticalSelector.className,
-                    settings.general.orientation === Orientation.VERTICAL);
+                    settings.slicer.orientation === Orientation.VERTICAL);
 
                 let slicerText: Selection<any> = rowSelection.selectAll(ChicletSlicer.LabelTextSelector.selectorName),
                     textProperties: TextProperties = ChicletSlicer.getChicletTextProperties(+settings.slicerText.textSize),
@@ -669,7 +669,7 @@ module powerbi.extensibility.visual {
                 .classed("searchInput", true)
                 .on("input", () => this.visualHost.persistProperties(<VisualObjectInstancesToPersist>{
                     merge: [{
-                        objectName: "system",
+                        objectName: "general",
                         selector: null,
                         properties: {
                             counter: counter++
@@ -679,8 +679,8 @@ module powerbi.extensibility.visual {
         }
 
         private updateSearchHeader(): void {
-            this.searchHeader.classed("show", this.slicerData.slicerSettings.system.selfFilterEnabled);
-            this.searchHeader.classed("collapsed", !this.slicerData.slicerSettings.system.selfFilterEnabled);
+            this.searchHeader.classed("show", this.slicerData.slicerSettings.general.selfFilterEnabled);
+            this.searchHeader.classed("collapsed", !this.slicerData.slicerSettings.general.selfFilterEnabled);
         }
 
         private getSearchHeaderHeight(): number {
@@ -692,7 +692,7 @@ module powerbi.extensibility.visual {
         private getSlicerBodyViewport(currentViewport: IViewport): IViewport {
             let settings: ChicletSlicerSettings = this.settings,
                 headerHeight: number = (settings.header.show) ? this.getHeaderHeight() : 0,
-                searchHeight: number = (settings.system.selfFilterEnabled) ? this.getSearchHeaderHeight() : 0,
+                searchHeight: number = (settings.general.selfFilterEnabled) ? this.getSearchHeaderHeight() : 0,
                 borderHeight: number = settings.header.outlineWeight,
                 height: number = currentViewport.height - (headerHeight + searchHeight + borderHeight + settings.header.borderBottomWidth),
                 width: number = currentViewport.width - ChicletSlicer.WidthOfScrollbar;
@@ -790,21 +790,21 @@ module powerbi.extensibility.visual {
 
             settings.images.imageSplit = ChicletSlicer.getValidImageSplit(settings.images.imageSplit);
 
-            settings.general.columns = settings.general.columns < 0
+            settings.slicer.columns = settings.slicer.columns < 0
                 ? 0
-                : settings.general.columns;
+                : settings.slicer.columns;
 
-            settings.general.columns = settings.general.columns > ChicletSlicer.MaxColumns
+            settings.slicer.columns = settings.slicer.columns > ChicletSlicer.MaxColumns
                 ? ChicletSlicer.MaxColumns
-                : settings.general.columns;
+                : settings.slicer.columns;
 
-            settings.general.rows = settings.general.rows < 0
+            settings.slicer.rows = settings.slicer.rows < 0
                 ? 0
-                : settings.general.rows;
+                : settings.slicer.rows;
 
-            settings.general.rows = settings.general.rows > ChicletSlicer.MaxRows
+            settings.slicer.rows = settings.slicer.rows > ChicletSlicer.MaxRows
                 ? ChicletSlicer.MaxRows
-                : settings.general.rows;
+                : settings.slicer.rows;
         }
     }
 

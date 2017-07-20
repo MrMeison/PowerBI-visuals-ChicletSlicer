@@ -84,6 +84,42 @@
             "displayName": "General",
             "displayNameKey": "Visual_General",
             "properties": {
+                "filter": {
+                    "type": {
+                        "filter": true
+                    }
+                },
+                "selfFilter": {
+                    "type": {
+                        "filter": {
+                            "selfFilter": true
+                        }
+                    }
+                },
+                "selfFilterEnabled": {
+                    "type": {
+                        "operations": {
+                            "searchEnabled": true
+                        }
+                    }
+                },
+                "selection": {
+                    "displayName": "Selection",
+                    "type": {
+                        "text": true
+                    }
+                },
+                "selected": {
+                    "type": {
+                        "bool": true
+                    }
+                }
+            }
+        },
+        "slicer": {
+            "displayName": "Slider Settings",
+            "description": "Slider Settings",
+            "properties": {
                 "orientation": {
                     "displayName": "Orientation",
                     "displayNameKey": "Visual_Orientation",
@@ -401,49 +437,6 @@
                     "displayNameKey": "Visual_Images_Bottom",
                     "type": {
                         "bool": true
-                    }
-                }
-            }
-        },
-        "system": {
-            "displayName": "System",
-            "description": "System properties: access only programmatically",
-            "properties": {
-                "selection": {
-                    "displayName": "Selection",
-                    "type": {
-                        "text": true
-                    }
-                },
-                "selected": {
-                    "type": {
-                        "bool": true
-                    }
-                },
-                "filter": {
-                    "type": {
-                        "filter": true
-                    }
-                },
-                "selfFilter": {
-                    "type": {
-                        "filter": {
-                            "selfFilter": true
-                        }
-                    }
-                },
-                "selfFilterEnabled": {
-                    "type": {
-                        "operations": {
-                            "searchEnabled": true
-                        }
-                    }
-                },
-                "formatString": {
-                    "type": {
-                        "formatting": {
-                            "labelDisplayUnits": false
-                        }
                     }
                 }
             }
