@@ -51,6 +51,7 @@ module powerbi.extensibility.visual {
         public constructor(dataView: DataView, host: IVisualHost) {
             const dataViewCategorical: DataViewCategorical = dataView.categorical;
             this.category = ChicletSlicerColumns.getCategoryColumnByName(dataView, "Category");
+            this.identityFields = <ISQExpr[]>this.category.identityFields;
             this.dataViewCategorical = dataViewCategorical;
             this.dataViewMetadata = dataView.metadata;
             this.host = host;
