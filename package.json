@@ -1,5 +1,5 @@
 {
-  "name": "powerbi-visuals-chicletslicer",
+  "name": "powerbi-visuals-advancedchicletslicer",
   "version": "1.4.5",
   "author": {
     "name": "Microsoft",
@@ -8,10 +8,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Microsoft/PowerBI-visuals-ChicletSlicer.git"
+    "url": "git+https://github.com/Microsoft/PowerBI-visuals-AdvancedChicletSlicer.git"
   },
   "scripts": {
-    "postinstall": "pbiviz update 1.7.0",
+    "postinstall": "pbiviz update 1.8.0",
     "pbiviz": "pbiviz",
     "start": "pbiviz start",
     "package": "pbiviz package",

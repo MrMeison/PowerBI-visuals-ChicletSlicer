@@ -96,7 +96,7 @@ module powerbi.extensibility.visual {
 
             slicerItemLabels.on("click", (dataPoint: ChicletSlicerDataPoint) => {
                 (d3.event as MouseEvent).preventDefault();
-                if (dataPoint.url) {
+                if (this.slicerSettings.images.clickableImage && dataPoint.url) {
                     options.host.launchUrl(dataPoint.url);
                 }
             });
