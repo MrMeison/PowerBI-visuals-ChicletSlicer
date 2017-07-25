@@ -41,6 +41,7 @@ module powerbi.extensibility.visual {
     import IInteractivityService = powerbi.extensibility.utils.interactivity.IInteractivityService;
 
     export interface ChicletSlicerBehaviorOptions {
+        host: IVisualHost;
         slicerItemContainers: Selection<SelectableDataPoint>;
         slicerItemLabels: Selection<any>;
         slicerItemInputs: Selection<any>;
@@ -68,7 +69,8 @@ module powerbi.extensibility.visual {
 
         public bindEvents(options: ChicletSlicerBehaviorOptions, selectionHandler: ISelectionHandler): void {
             const slicers: Selection<SelectableDataPoint> = this.slicers = options.slicerItemContainers,
-                slicerClear: Selection<any> = options.slicerClear;
+                slicerClear: Selection<any> = options.slicerClear,
+                slicerItemLabels = options.slicerItemLabels;
 
             this.slicerItemLabels = options.slicerItemLabels;
             this.slicerItemInputs = options.slicerItemInputs;
@@ -89,6 +91,13 @@ module powerbi.extensibility.visual {
                     dataPoint.mouseOut = false;
 
                     this.renderMouseover();
+                }
+            });
+
+            slicerItemLabels.on("click", (dataPoint: ChicletSlicerDataPoint) => {
+                (d3.event as MouseEvent).preventDefault();
+                if (dataPoint.url) {
+                    options.host.launchUrl(dataPoint.url);
                 }
             });
 

@@ -632,7 +632,8 @@ module powerbi.extensibility.visual {
                         interactivityService: this.interactivityService,
                         slicerSettings: data.slicerSettings,
                         isSelectionLoaded: this.isSelectionLoaded || data.hasHighlights,
-                        identityFields: data.identityFields
+                        identityFields: data.identityFields,
+                        host: this.visualHost
                     };
 
                     this.interactivityService.bind(data.slicerDataPoints, this.behavior, behaviorOptions, {
